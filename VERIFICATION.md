@@ -102,7 +102,7 @@ Scoring has a time limit, so a stalled machine can turn a pass into a timeout.
   evaluator reported a stall. A fresh rerun gave 500 of 500. The stored verdict was correct.
 - `evalplus.evaluate` silently reuses an existing results file, so repeating `rescore` used to report the old result. `run.sh`
   now deletes those files first.
-- 13 of the 16,000 stored evaluations recorded a timeout (12 distinct drafts, 22 draws). Rescoring them three times changed one
+- 13 of the 16,260 stored evaluations recorded a timeout (12 distinct drafts, 22 draws). Rescoring them three times changed one
   verdict: a Mbpp/255 draft stored as failed passed all three times. The pre-registration already notes that this task's
   reference runs close to its time limit. Correcting its three draws (14B reps 0 and 1, 7B rep 5) moves 14B accuracy from 0.752 to
   0.753 and tev from -0.4 to -0.5 points, and changes no verdict. Another Mbpp/255 draft varied between fail and timeout, so
