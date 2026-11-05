@@ -1,0 +1,97 @@
+{
+  "suites": [
+    "humaneval+",
+    "mbpp+"
+  ],
+  "seed": 1234,
+  "pilot_seed": 7,
+  "num_predict": 768,
+  "timeout_s": 300,
+  "max_usd": 0,
+  "ledger": "runs/spend_ledger.jsonl",
+  "judge_cache_dir": "judge_cache",
+  "tiers": [
+    {
+      "name": "local3b",
+      "role": "generator",
+      "kind": "ollama",
+      "base_url": "http://localhost:11434",
+      "model": "qwen2.5-coder:3b",
+      "params_b": 3.1,
+      "draws": 8,
+      "temperature": 0.8,
+      "notes": "Primary local tier. All draws at the pre-registered temperature, so draws 2..k are real resamples.",
+      "ref_decode_tps": 38.0
+    },
+    {
+      "name": "local1p5b",
+      "role": "generator",
+      "kind": "ollama",
+      "base_url": "http://localhost:11434",
+      "model": "qwen2.5-coder:1.5b",
+      "params_b": 1.5,
+      "draws": 8,
+      "temperature": 0.8,
+      "notes": "Secondary arm, wide tier gap to the 14B; all tasks.",
+      "ref_decode_tps": 70.0
+    },
+    {
+      "name": "local7b",
+      "role": "generator",
+      "kind": "ollama",
+      "base_url": "http://localhost:11434",
+      "model": "qwen2.5-coder:7b",
+      "params_b": 7.6,
+      "draws": 8,
+      "temperature": 0.8,
+      "notes": "Secondary arm: Chen's 7B->14B pair, all tasks.",
+      "ref_decode_tps": 11.5
+    },
+    {
+      "name": "strong14b",
+      "role": "generator",
+      "kind": "ollama",
+      "base_url": "http://localhost:11434",
+      "model": "qwen2.5-coder:14b",
+      "params_b": 14.8,
+      "draws": 5,
+      "temperature": 0.8,
+      "notes": "Escalation tier: the largest Qwen2.5-Coder that fits the 16 GB Mac. Same family as the local tiers, so size is the only difference.",
+      "ref_decode_tps": 8.0
+    },
+    {
+      "name": "llamajudge",
+      "role": "judge",
+      "kind": "ollama",
+      "base_url": "http://localhost:11434",
+      "model": "llama3.1:8b",
+      "params_b": 8.0,
+      "notes": "YES/NO judge from a different model family than every generator (Qwen), to expose same-family bias."
+    }
+  ],
+  "judges": {
+    "tev": {
+      "kind": "tev",
+      "base_url": "http://localhost:11434",
+      "model": "tev1:4b",
+      "params_b": 4.2
+    },
+    "llama": {
+      "kind": "ollama_logprob",
+      "tier": "llamajudge",
+      "top_logprobs": 20
+    },
+    "selfconf": {
+      "kind": "selfconf"
+    }
+  },
+  "block_size": 20,
+  "order_seed": 2026,
+  "cooldown": {
+    "min_ratio": 0.7,
+    "window": 10,
+    "pause_s": 240,
+    "max_wait_s": 1800,
+    "notes": "T13: heat on the fanless Mac slowed decoding up to 2.4x. ref_decode_tps = cool probe speed per tier (2026-10-23, Ollama 0.40.8, flash attention, q8_0 KV cache)."
+  }
+}

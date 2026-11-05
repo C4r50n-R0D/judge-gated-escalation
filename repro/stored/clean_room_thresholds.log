@@ -1,0 +1,6 @@
+cal coverage: 171/171 tasks usable (0.0% missing)
+judge tev: tau=0.8619849230515471 cal acc=0.803 (strong-only 0.794) tok=3675.60189 [cheapest tau whose calibration bootstrap lower bound of (gate - strong) accuracy is >= -delta/2]
+judge llama: tau=0.4667895416652746 cal acc=0.795 (strong-only 0.794) tok=5545.86821 [cheapest tau whose calibration bootstrap lower bound of (gate - strong) accuracy is >= -delta/2]
+judge selfconf: tau=0.9602630454757016 cal acc=0.788 (strong-only 0.794) tok=3835.01775 [cheapest tau whose calibration bootstrap lower bound of (gate - strong) accuracy is >= -delta/2]
+froze thresholds -> repro_out/thresholds.json (commit this file before running test)
+CONFIRMED: thresholds identical {'tev': 0.8619849230515471, 'llama': 0.4667895416652746, 'selfconf': 0.9602630454757016} {'tev': 0.8619849230515471, 'llama': 0.4667895416652746, 'selfconf': 0.9602630454757016}

@@ -1,0 +1,23 @@
+{
+ "name": "mb_distractor",
+ "definition": {
+  "base": "mbpp+",
+  "transform": "distractor",
+  "version": 3,
+  "framework": 2,
+  "seed": 1,
+  "params": {},
+  "split": "cal"
+ },
+ "definition_sha": "9f98ee39668a3a1d",
+ "n_tasks": 119,
+ "n_failed": 0,
+ "failures": {},
+ "tasks_sha256": "1c039ce63b4f644f72a0290858a48496a2031466420cb5f4895e16ee2a771e0e",
+ "verification": {
+  "selfcheck": {
+   "ok": true,
+   "summary": "238 rows: reference failures 0, stub passes 0, unscored 0 SELFCHECK OK: the scoring bridge reproduces canonical correctness on real data "
+  }
+ }
+}

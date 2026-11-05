@@ -1,0 +1,104 @@
+{
+ "id": "E12",
+ "title": "Controllers beyond the baseline (simulation part)",
+ "split": "any",
+ "steps": [
+  {
+   "name": "sim",
+   "cmd": "nice python3 ext/E12/sim.py runs/confirmatory.labeled.jsonl ext/E12/out",
+   "pilot_cmd": "nice python3 ext/E12/sim.py runs/confirmatory.labeled.jsonl ext/E12/pilot --pilot",
+   "timeout_s": 21600
+  }
+ ],
+ "comparisons": [
+  {
+   "name": "vis&tev vs visible->reroute",
+   "metric": "accuracy, token-compute",
+   "conditions": [
+    "transfer",
+    "recal"
+   ],
+   "status": "reported"
+  },
+  {
+   "name": "vis&llama vs visible->reroute",
+   "metric": "accuracy, token-compute",
+   "conditions": [
+    "transfer",
+    "recal"
+   ],
+   "status": "reported"
+  },
+  {
+   "name": "vis&selfconf vs visible->reroute",
+   "metric": "accuracy, token-compute",
+   "conditions": [
+    "transfer",
+    "recal"
+   ],
+   "status": "reported"
+  },
+  {
+   "name": "tev&sc vs visible->reroute",
+   "metric": "accuracy, token-compute",
+   "conditions": [
+    "transfer",
+    "recal"
+   ],
+   "status": "reported"
+  },
+  {
+   "name": "tev|sc vs visible->reroute",
+   "metric": "accuracy, token-compute",
+   "conditions": [
+    "transfer",
+    "recal"
+   ],
+   "status": "reported"
+  },
+  {
+   "name": "visible resample(k)->reroute vs visible->reroute",
+   "metric": "accuracy, token-compute",
+   "conditions": [
+    "k=2",
+    "k=3",
+    "k=4",
+    "k=5"
+   ],
+   "status": "reported"
+  },
+  {
+   "name": "tev resample(k)->reroute vs visible->reroute",
+   "metric": "accuracy, token-compute",
+   "conditions": [
+    "k=2",
+    "k=3",
+    "k=4",
+    "k=5"
+   ],
+   "status": "reported"
+  },
+  {
+   "name": "cascade 3B->7B->14B vs visible->reroute",
+   "metric": "accuracy, token-compute",
+   "conditions": [
+    "visible",
+    "tev",
+    "vis&tev"
+   ],
+   "status": "reported"
+  },
+  {
+   "name": "accuracy-vs-cost curves",
+   "metric": "accuracy, token-compute, seconds",
+   "conditions": [
+    "tev",
+    "llama",
+    "selfconf",
+    "vis&tev",
+    "vis&selfconf"
+   ],
+   "status": "reported"
+  }
+ ]
+}

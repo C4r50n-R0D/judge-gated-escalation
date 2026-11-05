@@ -1,0 +1,146 @@
+{
+ "id": "E6",
+ "title": "Prompt injection against the judges, and four defenses",
+ "split": "any",
+ "steps": [
+  {
+   "name": "config",
+   "timeout_s": 600,
+   "cmd": "python3 ext/E6/make_config.py",
+   "pilot_cmd": "python3 ext/E6/make_config.py"
+  },
+  {
+   "name": "inject",
+   "timeout_s": 21600,
+   "cmd": "nice python3 ext/E6/inject.py runs/E3.j00.jsonl runs/E6.j00.jsonl runs/E6_work --max-rep 2",
+   "pilot_cmd": "nice python3 ext/E6/inject.py runs/E3p.j00.jsonl runs/E6p.j00.jsonl runs/E6p_work --max-rep 1"
+  },
+  {
+   "name": "judge_tev",
+   "timeout_s": 43200,
+   "cmd": "python3 judge_label.py runs/E6.j00.jsonl ext/E6/config.json tev runs/E6.j01.jsonl --tiers local3b,local3b+inject_direct,local3b+inject_authority,local3b+inject_fake_json,local3b+inject_role_tags,local3b+inject_multilingual,local3b+inject_hidden_chars,local3b+inject_homoglyph,local3b+inject_padding,local3b+inject_string,local3b+inject_identifier,local3b@strip,local3b+inject_direct@strip,local3b+inject_authority@strip,local3b+inject_fake_json@strip,local3b+inject_role_tags@strip,local3b+inject_multilingual@strip,local3b+inject_hidden_chars@strip,local3b+inject_homoglyph@strip,local3b+inject_padding@strip,local3b+inject_string@strip,local3b+inject_identifier@strip,local3b@san,local3b+inject_direct@san,local3b+inject_authority@san,local3b+inject_fake_json@san,local3b+inject_role_tags@san,local3b+inject_multilingual@san,local3b+inject_hidden_chars@san,local3b+inject_homoglyph@san,local3b+inject_padding@san,local3b+inject_string@san,local3b+inject_identifier@san",
+   "pilot_cmd": "python3 judge_label.py runs/E6p.j00.jsonl ext/E6/config.json tev runs/E6p.j01.jsonl --tiers local3b,local3b+inject_direct,local3b+inject_authority,local3b+inject_fake_json,local3b+inject_role_tags,local3b+inject_multilingual,local3b+inject_hidden_chars,local3b+inject_homoglyph,local3b+inject_padding,local3b+inject_string,local3b+inject_identifier,local3b@strip,local3b+inject_direct@strip,local3b+inject_authority@strip,local3b+inject_fake_json@strip,local3b+inject_role_tags@strip,local3b+inject_multilingual@strip,local3b+inject_hidden_chars@strip,local3b+inject_homoglyph@strip,local3b+inject_padding@strip,local3b+inject_string@strip,local3b+inject_identifier@strip,local3b@san,local3b+inject_direct@san,local3b+inject_authority@san,local3b+inject_fake_json@san,local3b+inject_role_tags@san,local3b+inject_multilingual@san,local3b+inject_hidden_chars@san,local3b+inject_homoglyph@san,local3b+inject_padding@san,local3b+inject_string@san,local3b+inject_identifier@san"
+  },
+  {
+   "name": "judge_tev_delim",
+   "timeout_s": 43200,
+   "cmd": "python3 judge_label.py runs/E6.j01.jsonl ext/E6/config.json tev_delim runs/E6.j02.jsonl --tiers local3b,local3b+inject_direct,local3b+inject_authority,local3b+inject_fake_json,local3b+inject_role_tags,local3b+inject_multilingual,local3b+inject_hidden_chars,local3b+inject_homoglyph,local3b+inject_padding,local3b+inject_string,local3b+inject_identifier",
+   "pilot_cmd": "python3 judge_label.py runs/E6p.j01.jsonl ext/E6/config.json tev_delim runs/E6p.j02.jsonl --tiers local3b,local3b+inject_direct,local3b+inject_authority,local3b+inject_fake_json,local3b+inject_role_tags,local3b+inject_multilingual,local3b+inject_hidden_chars,local3b+inject_homoglyph,local3b+inject_padding,local3b+inject_string,local3b+inject_identifier"
+  },
+  {
+   "name": "judge_tev_hier",
+   "timeout_s": 43200,
+   "cmd": "python3 judge_label.py runs/E6.j02.jsonl ext/E6/config.json tev_hier runs/E6.j03.jsonl --tiers local3b,local3b+inject_direct,local3b+inject_authority,local3b+inject_fake_json,local3b+inject_role_tags,local3b+inject_multilingual,local3b+inject_hidden_chars,local3b+inject_homoglyph,local3b+inject_padding,local3b+inject_string,local3b+inject_identifier",
+   "pilot_cmd": "python3 judge_label.py runs/E6p.j02.jsonl ext/E6/config.json tev_hier runs/E6p.j03.jsonl --tiers local3b,local3b+inject_direct,local3b+inject_authority,local3b+inject_fake_json,local3b+inject_role_tags,local3b+inject_multilingual,local3b+inject_hidden_chars,local3b+inject_homoglyph,local3b+inject_padding,local3b+inject_string,local3b+inject_identifier"
+  },
+  {
+   "name": "judge_llama",
+   "timeout_s": 43200,
+   "cmd": "python3 judge_label.py runs/E6.j03.jsonl ext/E6/config.json llama runs/E6.j04.jsonl --tiers local3b,local3b+inject_direct,local3b+inject_authority,local3b+inject_fake_json,local3b+inject_role_tags,local3b+inject_multilingual,local3b+inject_hidden_chars,local3b+inject_homoglyph,local3b+inject_padding,local3b+inject_string,local3b+inject_identifier,local3b@strip,local3b+inject_direct@strip,local3b+inject_authority@strip,local3b+inject_fake_json@strip,local3b+inject_role_tags@strip,local3b+inject_multilingual@strip,local3b+inject_hidden_chars@strip,local3b+inject_homoglyph@strip,local3b+inject_padding@strip,local3b+inject_string@strip,local3b+inject_identifier@strip,local3b@san,local3b+inject_direct@san,local3b+inject_authority@san,local3b+inject_fake_json@san,local3b+inject_role_tags@san,local3b+inject_multilingual@san,local3b+inject_hidden_chars@san,local3b+inject_homoglyph@san,local3b+inject_padding@san,local3b+inject_string@san,local3b+inject_identifier@san",
+   "pilot_cmd": "python3 judge_label.py runs/E6p.j03.jsonl ext/E6/config.json llama runs/E6p.j04.jsonl --tiers local3b,local3b+inject_direct,local3b+inject_authority,local3b+inject_fake_json,local3b+inject_role_tags,local3b+inject_multilingual,local3b+inject_hidden_chars,local3b+inject_homoglyph,local3b+inject_padding,local3b+inject_string,local3b+inject_identifier,local3b@strip,local3b+inject_direct@strip,local3b+inject_authority@strip,local3b+inject_fake_json@strip,local3b+inject_role_tags@strip,local3b+inject_multilingual@strip,local3b+inject_hidden_chars@strip,local3b+inject_homoglyph@strip,local3b+inject_padding@strip,local3b+inject_string@strip,local3b+inject_identifier@strip,local3b@san,local3b+inject_direct@san,local3b+inject_authority@san,local3b+inject_fake_json@san,local3b+inject_role_tags@san,local3b+inject_multilingual@san,local3b+inject_hidden_chars@san,local3b+inject_homoglyph@san,local3b+inject_padding@san,local3b+inject_string@san,local3b+inject_identifier@san"
+  },
+  {
+   "name": "judge_llama_delim",
+   "timeout_s": 43200,
+   "cmd": "python3 judge_label.py runs/E6.j04.jsonl ext/E6/config.json llama_delim runs/E6.j05.jsonl --tiers local3b,local3b+inject_direct,local3b+inject_authority,local3b+inject_fake_json,local3b+inject_role_tags,local3b+inject_multilingual,local3b+inject_hidden_chars,local3b+inject_homoglyph,local3b+inject_padding,local3b+inject_string,local3b+inject_identifier",
+   "pilot_cmd": "python3 judge_label.py runs/E6p.j04.jsonl ext/E6/config.json llama_delim runs/E6p.j05.jsonl --tiers local3b,local3b+inject_direct,local3b+inject_authority,local3b+inject_fake_json,local3b+inject_role_tags,local3b+inject_multilingual,local3b+inject_hidden_chars,local3b+inject_homoglyph,local3b+inject_padding,local3b+inject_string,local3b+inject_identifier"
+  },
+  {
+   "name": "judge_llama_hier",
+   "timeout_s": 43200,
+   "cmd": "python3 judge_label.py runs/E6.j05.jsonl ext/E6/config.json llama_hier runs/E6.j06.jsonl --tiers local3b,local3b+inject_direct,local3b+inject_authority,local3b+inject_fake_json,local3b+inject_role_tags,local3b+inject_multilingual,local3b+inject_hidden_chars,local3b+inject_homoglyph,local3b+inject_padding,local3b+inject_string,local3b+inject_identifier",
+   "pilot_cmd": "python3 judge_label.py runs/E6p.j05.jsonl ext/E6/config.json llama_hier runs/E6p.j06.jsonl --tiers local3b,local3b+inject_direct,local3b+inject_authority,local3b+inject_fake_json,local3b+inject_role_tags,local3b+inject_multilingual,local3b+inject_hidden_chars,local3b+inject_homoglyph,local3b+inject_padding,local3b+inject_string,local3b+inject_identifier"
+  },
+  {
+   "name": "analyze",
+   "timeout_s": 7200,
+   "cmd": "nice python3 ext/E6/analyze.py runs/E6.j06.jsonl ext/E6/out",
+   "pilot_cmd": "nice python3 ext/E6/analyze.py runs/E6p.j06.jsonl ext/E6/pilot --boots 200"
+  }
+ ],
+ "comparisons": [
+  {
+   "name": "injection effect on false-accept at frozen tau, no defense",
+   "metric": "FA injected minus clean among wrong drafts",
+   "conditions": [
+    "direct",
+    "authority",
+    "fake_json",
+    "role_tags",
+    "multilingual",
+    "hidden_chars",
+    "homoglyph",
+    "padding",
+    "string",
+    "identifier",
+    "pooled"
+   ],
+   "status": "reported"
+  },
+  {
+   "name": "attack success, no defense",
+   "metric": "share of clean-rejected wrong drafts accepted when injected",
+   "conditions": [
+    "direct",
+    "authority",
+    "fake_json",
+    "role_tags",
+    "multilingual",
+    "hidden_chars",
+    "homoglyph",
+    "padding",
+    "string",
+    "identifier",
+    "pooled"
+   ],
+   "status": "reported"
+  },
+  {
+   "name": "injection effect on correct drafts and ranking",
+   "metric": "mean dp on correct drafts; AUROC injected minus clean",
+   "conditions": [
+    "direct",
+    "authority",
+    "fake_json",
+    "role_tags",
+    "multilingual",
+    "hidden_chars",
+    "homoglyph",
+    "padding",
+    "string",
+    "identifier"
+   ],
+   "status": "reported"
+  },
+  {
+   "name": "residual injection effect per defense",
+   "metric": "FA diff at frozen and matched tau",
+   "conditions": [
+    "strip",
+    "san",
+    "delim",
+    "hier"
+   ],
+   "status": "reported"
+  },
+  {
+   "name": "defense cost on clean drafts",
+   "metric": "clean AUROC and accept-rate change",
+   "conditions": [
+    "strip",
+    "san",
+    "delim",
+    "hier"
+   ],
+   "status": "reported"
+  },
+  {
+   "name": "unparseable rate by condition",
+   "metric": "share of labels with an unparseable vote",
+   "conditions": [
+    "all conditions"
+   ],
+   "status": "reported"
+  }
+ ]
+}

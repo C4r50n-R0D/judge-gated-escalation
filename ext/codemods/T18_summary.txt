@@ -1,0 +1,42 @@
+he drop_guard           mutate   not applicable  39  kept 13/13 (dropped as possibly equivalent 0)
+he early_exit           mutate   not applicable  21  kept 31/31 (dropped as possibly equivalent 0)
+he flip_comparison      mutate   not applicable  17  kept 33/35 (dropped as possibly equivalent 2)
+he inject_authority     inject   not applicable   0  verdict changes 0/104
+he inject_direct        inject   not applicable   0  verdict changes 0/104
+he inject_fake_json     inject   not applicable   0  verdict changes 0/104
+he inject_hidden_chars  inject   not applicable   0  verdict changes 0/104
+he inject_homoglyph     inject   not applicable   0  verdict changes 0/104
+he inject_identifier    inject   not applicable   0  verdict changes 0/104
+he inject_multilingual  inject   not applicable   0  verdict changes 0/104
+he inject_padding       inject   not applicable   0  verdict changes 0/104
+he inject_role_tags     inject   not applicable   0  verdict changes 0/104
+he inject_string        inject   not applicable   0  verdict changes 0/104
+he off_by_one           mutate   not applicable  28  kept 22/24 (dropped as possibly equivalent 2)
+he reformat             preserve not applicable   0  verdict changes 0/104
+he rename_locals        preserve not applicable  62  verdict changes 0/42
+he reorder_helpers      preserve not applicable 104  verdict changes 0/0
+he strip_comments       preserve not applicable   0  verdict changes 0/104
+he swap_args            mutate   not applicable  31  kept 19/21 (dropped as possibly equivalent 2)
+he verbose_comments     preserve not applicable   0  verdict changes 0/104
+he wrong_init           mutate   not applicable  37  kept 14/15 (dropped as possibly equivalent 1)
+mb drop_guard           mutate   not applicable 115  kept 4/4 (dropped as possibly equivalent 0)
+mb early_exit           mutate   not applicable  92  kept 24/27 (dropped as possibly equivalent 3)
+mb flip_comparison      mutate   not applicable  80  kept 35/39 (dropped as possibly equivalent 4)
+mb inject_authority     inject   not applicable   0  verdict changes 0/238
+mb inject_direct        inject   not applicable   0  verdict changes 0/238
+mb inject_fake_json     inject   not applicable   0  verdict changes 0/238
+mb inject_hidden_chars  inject   not applicable   0  verdict changes 0/238
+mb inject_homoglyph     inject   not applicable   0  verdict changes 0/238
+mb inject_identifier    inject   not applicable   0  verdict changes 0/238
+mb inject_multilingual  inject   not applicable   0  verdict changes 0/238
+mb inject_padding       inject   not applicable   0  verdict changes 0/238
+mb inject_role_tags     inject   not applicable   0  verdict changes 0/238
+mb inject_string        inject   not applicable   0  verdict changes 0/238
+mb off_by_one           mutate   not applicable  80  kept 35/39 (dropped as possibly equivalent 4)
+mb reformat             preserve not applicable   0  verdict changes 0/238
+mb rename_locals        preserve not applicable 170  verdict changes 0/68
+mb reorder_helpers      preserve not applicable 236  verdict changes 0/2
+mb strip_comments       preserve not applicable   0  verdict changes 0/238
+mb swap_args            mutate   not applicable  72  kept 38/47 (dropped as possibly equivalent 9)
+mb verbose_comments     preserve not applicable   0  verdict changes 0/238
+mb wrong_init           mutate   not applicable 101  kept 15/18 (dropped as possibly equivalent 3)

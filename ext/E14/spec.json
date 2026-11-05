@@ -1,0 +1,73 @@
+{
+ "id": "E14",
+ "title": "Calibration and drift (part a: shifts in stored data)",
+ "split": "any",
+ "steps": [
+  {
+   "name": "analyze",
+   "cmd": "nice python3 ext/E14/e14.py runs/confirmatory.labeled.jsonl ext/E14/out",
+   "pilot_cmd": "nice python3 ext/E14/e14.py runs/confirmatory.labeled.jsonl ext/E14/pilot --pilot",
+   "timeout_s": 21600
+  }
+ ],
+ "comparisons": [
+  {
+   "name": "frozen tau, test 3B vs calibration 3B",
+   "metric": "accept rate, accepted-set accuracy, false-accept, false-reject, ECE",
+   "conditions": [
+    "tev",
+    "llama",
+    "selfconf"
+   ],
+   "status": "reported"
+  },
+  {
+   "name": "frozen tau, other generators vs test 3B",
+   "metric": "accept rate, accepted-set accuracy, false-accept, false-reject, ECE",
+   "conditions": [
+    "1.5B",
+    "7B",
+    "14B"
+   ],
+   "status": "reported"
+  },
+  {
+   "name": "frozen tau, HumanEval+ vs MBPP+",
+   "metric": "accept rate, accepted-set accuracy, false-accept, false-reject, ECE",
+   "conditions": [
+    "tev",
+    "llama",
+    "selfconf"
+   ],
+   "status": "reported"
+  },
+  {
+   "name": "frozen tau, generation-time Q5 vs Q1",
+   "metric": "accept rate, accepted-set accuracy, false-accept, false-reject, ECE",
+   "conditions": [
+    "tev",
+    "llama",
+    "selfconf"
+   ],
+   "status": "reported"
+  },
+  {
+   "name": "Platt and isotonic recalibration under shift",
+   "metric": "ECE, Brier",
+   "conditions": [
+    "each condition above"
+   ],
+   "status": "reported"
+  },
+  {
+   "name": "CUSUM drift monitor",
+   "metric": "false-alarm rate, detection rate, delay",
+   "conditions": [
+    "accept signal",
+    "accepted-visible-fail signal",
+    "switch to 1.5B, 7B, 14B"
+   ],
+   "status": "reported"
+  }
+ ]
+}

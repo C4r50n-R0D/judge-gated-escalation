@@ -1,0 +1,258 @@
+{
+ "suites": [
+  "humaneval+",
+  "mbpp+"
+ ],
+ "seed": 1234,
+ "pilot_seed": 7,
+ "num_predict": 768,
+ "timeout_s": 300,
+ "max_usd": 0,
+ "ledger": "../../runs/spend_ledger.jsonl",
+ "judge_cache_dir": "../../judge_cache",
+ "tiers": [
+  {
+   "name": "local3b",
+   "role": "generator",
+   "kind": "ollama",
+   "base_url": "http://localhost:11434",
+   "model": "qwen2.5-coder:3b",
+   "params_b": 3.1,
+   "draws": 8,
+   "temperature": 0.8,
+   "notes": "Primary local tier. All draws at the pre-registered temperature, so draws 2..k are real resamples.",
+   "ref_decode_tps": 38.0
+  },
+  {
+   "name": "local1p5b",
+   "role": "generator",
+   "kind": "ollama",
+   "base_url": "http://localhost:11434",
+   "model": "qwen2.5-coder:1.5b",
+   "params_b": 1.5,
+   "draws": 8,
+   "temperature": 0.8,
+   "notes": "Secondary arm, wide tier gap to the 14B; all tasks.",
+   "ref_decode_tps": 70.0
+  },
+  {
+   "name": "local7b",
+   "role": "generator",
+   "kind": "ollama",
+   "base_url": "http://localhost:11434",
+   "model": "qwen2.5-coder:7b",
+   "params_b": 7.6,
+   "draws": 8,
+   "temperature": 0.8,
+   "notes": "Secondary arm: Chen's 7B->14B pair, all tasks.",
+   "ref_decode_tps": 11.5
+  },
+  {
+   "name": "strong14b",
+   "role": "generator",
+   "kind": "ollama",
+   "base_url": "http://localhost:11434",
+   "model": "qwen2.5-coder:14b",
+   "params_b": 14.8,
+   "draws": 5,
+   "temperature": 0.8,
+   "notes": "Escalation tier: the largest Qwen2.5-Coder that fits the 16 GB Mac. Same family as the local tiers, so size is the only difference.",
+   "ref_decode_tps": 8.0
+  },
+  {
+   "name": "llamajudge",
+   "role": "judge",
+   "kind": "ollama",
+   "base_url": "http://localhost:11434",
+   "model": "llama3.1:8b",
+   "params_b": 8.0,
+   "notes": "YES/NO judge from a different model family than every generator (Qwen), to expose same-family bias."
+  },
+  {
+   "name": "gemmajudge",
+   "role": "judge",
+   "kind": "ollama",
+   "base_url": "http://localhost:11434",
+   "model": "gemma4:12b",
+   "params_b": 12.4,
+   "notes": "Google Gemma 4, thinking disabled"
+  },
+  {
+   "name": "qwen35judge",
+   "role": "judge",
+   "kind": "ollama",
+   "base_url": "http://localhost:11434",
+   "model": "qwen3.5:9b",
+   "params_b": 9.7,
+   "notes": "Qwen 3.5 general model, thinking disabled"
+  },
+  {
+   "name": "qwen25ijudge",
+   "role": "judge",
+   "kind": "ollama",
+   "base_url": "http://localhost:11434",
+   "model": "qwen2.5:7b-instruct",
+   "params_b": 7.6,
+   "notes": "Qwen 2.5 general instruct (same family as the generators)"
+  }
+ ],
+ "judges": {
+  "tev": {
+   "kind": "tev",
+   "base_url": "http://localhost:11434",
+   "model": "tev1:4b",
+   "params_b": 4.2
+  },
+  "llama": {
+   "kind": "ollama_logprob",
+   "tier": "llamajudge",
+   "top_logprobs": 20
+  },
+  "selfconf": {
+   "kind": "selfconf"
+  },
+  "gemma": {
+   "kind": "ollama_logprob",
+   "tier": "gemmajudge",
+   "top_logprobs": 20,
+   "think": false
+  },
+  "qwen35": {
+   "kind": "ollama_logprob",
+   "tier": "qwen35judge",
+   "top_logprobs": 20,
+   "think": false
+  },
+  "qwen25i": {
+   "kind": "ollama_logprob",
+   "tier": "qwen25ijudge",
+   "top_logprobs": 20
+  },
+  "tev_p1": {
+   "kind": "tev",
+   "base_url": "http://localhost:11434",
+   "model": "tev1:4b",
+   "params_b": 4.2,
+   "question": "Is `candidate_code` a correct solution to `task`?"
+  },
+  "tev_p2": {
+   "kind": "tev",
+   "base_url": "http://localhost:11434",
+   "model": "tev1:4b",
+   "params_b": 4.2,
+   "question": "Would `candidate_code` pass a thorough hidden test suite for `task`, including edge cases? It has not been executed."
+  },
+  "tev_p3": {
+   "kind": "tev",
+   "base_url": "http://localhost:11434",
+   "model": "tev1:4b",
+   "params_b": 4.2,
+   "question": "Read `task` and `candidate_code`. Decide whether the code does exactly what the task asks, for all valid inputs. Do not assume it was tested."
+  },
+  "tev_p4": {
+   "kind": "tev",
+   "base_url": "http://localhost:11434",
+   "model": "tev1:4b",
+   "params_b": 4.2,
+   "question": "Is `candidate_code` free of bugs and missing edge cases with respect to `task`?"
+  },
+  "tev_p5": {
+   "kind": "tev",
+   "base_url": "http://localhost:11434",
+   "model": "tev1:4b",
+   "params_b": 4.2,
+   "question": "As a strict senior reviewer, would you approve `candidate_code` as a complete and correct implementation of `task`?"
+  },
+  "tev_p6": {
+   "kind": "tev",
+   "base_url": "http://localhost:11434",
+   "model": "tev1:4b",
+   "params_b": 4.2,
+   "question": "Check `candidate_code` against `task` line by line. Is it correct on every input the task allows, including empty, boundary and unusual inputs?"
+  },
+  "llama_p1": {
+   "kind": "ollama_logprob",
+   "tier": "llamajudge",
+   "top_logprobs": 20,
+   "question": "Is this code a correct solution to the task? Answer YES or NO."
+  },
+  "llama_p2": {
+   "kind": "ollama_logprob",
+   "tier": "llamajudge",
+   "top_logprobs": 20,
+   "question": "Would this code pass a thorough hidden test suite for the task, including edge cases? It has not been run. Answer YES or NO."
+  },
+  "llama_p3": {
+   "kind": "ollama_logprob",
+   "tier": "llamajudge",
+   "top_logprobs": 20,
+   "question": "Does this code do exactly what the task asks, for all valid inputs? Do not assume it was tested. Answer YES or NO."
+  },
+  "llama_p4": {
+   "kind": "ollama_logprob",
+   "tier": "llamajudge",
+   "top_logprobs": 20,
+   "question": "Is this code free of bugs and missing edge cases? Answer YES or NO."
+  },
+  "llama_p5": {
+   "kind": "ollama_logprob",
+   "tier": "llamajudge",
+   "top_logprobs": 20,
+   "question": "As a strict senior reviewer, would you approve this code as a complete and correct implementation of the task? Answer YES or NO."
+  },
+  "llama_p6": {
+   "kind": "ollama_logprob",
+   "tier": "llamajudge",
+   "top_logprobs": 20,
+   "question": "Check the code against the task line by line. Is it correct on every input the task allows, including empty, boundary and unusual inputs? Answer YES or NO."
+  },
+  "tev_nocrit": {
+   "kind": "tev",
+   "base_url": "http://localhost:11434",
+   "model": "tev1:4b",
+   "params_b": 4.2,
+   "criteria": false
+  },
+  "llama_crit": {
+   "kind": "ollama_logprob",
+   "tier": "llamajudge",
+   "top_logprobs": 20,
+   "criteria": true
+  },
+  "tev_codeonly": {
+   "kind": "tev",
+   "base_url": "http://localhost:11434",
+   "model": "tev1:4b",
+   "params_b": 4.2,
+   "code_only": true
+  },
+  "tev_codefirst": {
+   "kind": "tev",
+   "base_url": "http://localhost:11434",
+   "model": "tev1:4b",
+   "params_b": 4.2,
+   "order": "code_first"
+  },
+  "llama_codeonly": {
+   "kind": "ollama_logprob",
+   "tier": "llamajudge",
+   "top_logprobs": 20,
+   "code_only": true
+  },
+  "llama_codefirst": {
+   "kind": "ollama_logprob",
+   "tier": "llamajudge",
+   "top_logprobs": 20,
+   "order": "code_first"
+  }
+ },
+ "block_size": 20,
+ "order_seed": 2026,
+ "cooldown": {
+  "min_ratio": 0.7,
+  "window": 10,
+  "pause_s": 240,
+  "max_wait_s": 1800,
+  "notes": "T13: heat on the fanless Mac slowed decoding up to 2.4x. ref_decode_tps = cool probe speed per tier (2026-10-23, Ollama 0.40.8, flash attention, q8_0 KV cache)."
+ }
+}

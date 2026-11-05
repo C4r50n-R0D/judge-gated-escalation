@@ -1,0 +1,42 @@
+{
+ "id": "E14b",
+ "title": "Frozen taus, recalibration and drift monitor under the E3 to E6 shifts",
+ "split": "any",
+ "steps": [
+  {
+   "name": "analyze",
+   "timeout_s": 14400,
+   "cmd": "nice python3 ext/E14b/e14b.py ext/E14b/out",
+   "pilot_cmd": "nice python3 ext/E14b/e14b.py ext/E14b/pilot --pilot"
+  }
+ ],
+ "comparisons": [
+  {
+   "name": "frozen-tau behaviour under shift vs subset clean",
+   "metric": "accept rate, accepted-set accuracy, false-accept, false-reject differences",
+   "conditions": [
+    "E3 prompt variants",
+    "E4 rewrites",
+    "E5 mutants",
+    "E6 payloads and defenses"
+   ],
+   "status": "reported"
+  },
+  {
+   "name": "recalibration under shift",
+   "metric": "ECE raw, Platt, isotonic",
+   "conditions": [
+    "every condition"
+   ],
+   "status": "reported"
+  },
+  {
+   "name": "drift monitor detection",
+   "metric": "detection within 700, median delay, false alarms",
+   "conditions": [
+    "every condition with at least 50 test drafts"
+   ],
+   "status": "reported"
+  }
+ ]
+}

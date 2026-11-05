@@ -1,0 +1,68 @@
+{
+ "id": "E2",
+ "title": "Judge zoo and ensembles",
+ "split": "any",
+ "steps": [
+  {
+   "name": "judge_gemma",
+   "cmd": "python3 judge_label.py runs/confirmatory.labeled.jsonl ext/E2/config.json gemma runs/E2.j1.jsonl --tiers local3b",
+   "pilot_cmd": "python3 ext/E2/subset.py runs/confirmatory.labeled.jsonl runs/E2p.in.jsonl 20 && python3 judge_label.py runs/E2p.in.jsonl ext/E2/config.json gemma runs/E2p.j1.jsonl --tiers local3b",
+   "timeout_s": 43200
+  },
+  {
+   "name": "judge_qwen35",
+   "cmd": "python3 judge_label.py runs/E2.j1.jsonl ext/E2/config.json qwen35 runs/E2.j2.jsonl --tiers local3b",
+   "pilot_cmd": "python3 judge_label.py runs/E2p.j1.jsonl ext/E2/config.json qwen35 runs/E2p.j2.jsonl --tiers local3b",
+   "timeout_s": 43200
+  },
+  {
+   "name": "judge_qwen25i",
+   "cmd": "python3 judge_label.py runs/E2.j2.jsonl ext/E2/config.json qwen25i runs/E2.j3.jsonl --tiers local3b",
+   "pilot_cmd": "python3 judge_label.py runs/E2p.j2.jsonl ext/E2/config.json qwen25i runs/E2p.j3.jsonl --tiers local3b",
+   "timeout_s": 43200
+  },
+  {
+   "name": "derived",
+   "cmd": "python3 tools/derived_judges.py runs/E2.j3.jsonl runs/E2.labeled.jsonl --base tev,llama,selfconf,gemma,qwen35,qwen25i --tiers local3b --fits ext/E2/fits.json",
+   "pilot_cmd": "python3 tools/derived_judges.py runs/E2p.j3.jsonl runs/E2p.labeled.jsonl --base tev,llama,selfconf,gemma,qwen35,qwen25i --tiers local3b --fits ext/E2/pilot_fits.json"
+  },
+  {
+   "name": "analyze",
+   "cmd": "nice python3 tools/judge_eval.py runs/E2.labeled.jsonl ext/E2/out --judges tev,llama,selfconf,gemma,qwen35,qwen25i,tev_platt,tev_iso,llama_platt,llama_iso,selfconf_platt,selfconf_iso,gemma_platt,gemma_iso,qwen35_platt,qwen35_iso,qwen25i_platt,qwen25i_iso,ens_mean,ens_stack",
+   "pilot_cmd": "echo pilot: analysis skipped, 20 calibration tasks only"
+  }
+ ],
+ "comparisons": [
+  {
+   "name": "AUROC minus tev, test split",
+   "metric": "AUROC difference",
+   "conditions": [
+    "llama",
+    "selfconf",
+    "gemma",
+    "qwen35",
+    "qwen25i",
+    "ens_mean",
+    "ens_stack"
+   ],
+   "status": "reported"
+  },
+  {
+   "name": "calibration methods",
+   "metric": "ECE, Brier, AUROC",
+   "conditions": [
+    "platt",
+    "isotonic"
+   ],
+   "status": "reported"
+  },
+  {
+   "name": "recal judge->reroute vs strong-only and visible->reroute",
+   "metric": "accuracy, token-compute",
+   "conditions": [
+    "each judge and ensemble"
+   ],
+   "status": "reported"
+  }
+ ]
+}

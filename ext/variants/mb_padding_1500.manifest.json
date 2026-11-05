@@ -1,0 +1,25 @@
+{
+ "name": "mb_padding_1500",
+ "definition": {
+  "base": "mbpp+",
+  "transform": "padding",
+  "version": 2,
+  "framework": 2,
+  "seed": 1,
+  "params": {
+   "words": 1500
+  },
+  "split": "cal"
+ },
+ "definition_sha": "04f5551b1597f125",
+ "n_tasks": 119,
+ "n_failed": 0,
+ "failures": {},
+ "tasks_sha256": "1f88a95225d9e2d46132d17f63cb1737391cf036e10913d36ae1b773761f0bbe",
+ "verification": {
+  "selfcheck": {
+   "ok": true,
+   "summary": "238 rows: reference failures 0, stub passes 0, unscored 0 SELFCHECK OK: the scoring bridge reproduces canonical correctness on real data "
+  }
+ }
+}

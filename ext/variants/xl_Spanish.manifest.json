@@ -1,0 +1,51 @@
+{
+ "name": "xl_Spanish",
+ "definition": {
+  "base": "humaneval+",
+  "transform": "humaneval_xl",
+  "version": 1,
+  "framework": 2,
+  "seed": 1,
+  "params": {
+   "dir": "data/humaneval_xl/1e9301f6cfc2d3481a7f7e44569982285238ac99/python",
+   "lang": "Spanish"
+  },
+  "split": "cal"
+ },
+ "definition_sha": "186770ed7d1db04f",
+ "n_tasks": 28,
+ "n_failed": 24,
+ "failures": {
+  "HumanEval/0": "transform not applicable",
+  "HumanEval/1": "transform not applicable",
+  "HumanEval/10": "transform not applicable",
+  "HumanEval/111": "transform not applicable",
+  "HumanEval/113": "transform not applicable",
+  "HumanEval/123": "transform not applicable",
+  "HumanEval/124": "transform not applicable",
+  "HumanEval/125": "transform not applicable",
+  "HumanEval/140": "transform not applicable",
+  "HumanEval/155": "transform not applicable",
+  "HumanEval/158": "transform not applicable",
+  "HumanEval/160": "transform not applicable",
+  "HumanEval/17": "transform not applicable",
+  "HumanEval/36": "transform not applicable",
+  "HumanEval/41": "transform not applicable",
+  "HumanEval/45": "transform not applicable",
+  "HumanEval/56": "transform not applicable",
+  "HumanEval/6": "transform not applicable",
+  "HumanEval/7": "transform not applicable",
+  "HumanEval/70": "transform not applicable",
+  "HumanEval/74": "transform not applicable",
+  "HumanEval/84": "transform not applicable",
+  "HumanEval/88": "transform not applicable",
+  "HumanEval/89": "transform not applicable"
+ },
+ "tasks_sha256": "afe2d70449ba56ce262bc0a7b68fe00892ea50669223580f372575ab05a9f688",
+ "verification": {
+  "selfcheck": {
+   "ok": true,
+   "summary": "56 rows: reference failures 0, stub passes 0, unscored 0 SELFCHECK OK: the scoring bridge reproduces canonical correctness on real data "
+  }
+ }
+}

@@ -1,0 +1,84 @@
+{
+ "id": "E5",
+ "title": "Judge detection of synthetic bugs (T18 mutants)",
+ "split": "any",
+ "steps": [
+  {
+   "name": "mutate",
+   "timeout_s": 21600,
+   "cmd": "nice python3 ext/E5/mutate.py runs/E3.j00.jsonl runs/E5.j00.jsonl runs/E5_work",
+   "pilot_cmd": "nice python3 ext/E5/mutate.py runs/E3p.j00.jsonl runs/E5p.j00.jsonl runs/E5p_work"
+  },
+  {
+   "name": "judge_tev",
+   "timeout_s": 21600,
+   "cmd": "python3 judge_label.py runs/E5.j00.jsonl ext/E3/config.json tev runs/E5.j01.jsonl --tiers local3b+off_by_one,local3b+flip_comparison,local3b+swap_args,local3b+wrong_init,local3b+drop_guard,local3b+early_exit",
+   "pilot_cmd": "python3 judge_label.py runs/E5p.j00.jsonl ext/E3/config.json tev runs/E5p.j01.jsonl --tiers local3b+off_by_one,local3b+flip_comparison,local3b+swap_args,local3b+wrong_init,local3b+drop_guard,local3b+early_exit --max-rep 2"
+  },
+  {
+   "name": "judge_llama",
+   "timeout_s": 21600,
+   "cmd": "python3 judge_label.py runs/E5.j01.jsonl ext/E3/config.json llama runs/E5.j02.jsonl --tiers local3b+off_by_one,local3b+flip_comparison,local3b+swap_args,local3b+wrong_init,local3b+drop_guard,local3b+early_exit",
+   "pilot_cmd": "python3 judge_label.py runs/E5p.j01.jsonl ext/E3/config.json llama runs/E5p.j02.jsonl --tiers local3b+off_by_one,local3b+flip_comparison,local3b+swap_args,local3b+wrong_init,local3b+drop_guard,local3b+early_exit --max-rep 2"
+  },
+  {
+   "name": "analyze",
+   "timeout_s": 7200,
+   "cmd": "nice python3 ext/E5/analyze.py runs/E5.j02.jsonl ext/E5/out",
+   "pilot_cmd": "nice python3 ext/E5/analyze.py runs/E5p.j02.jsonl ext/E5/pilot --boots 200"
+  }
+ ],
+ "comparisons": [
+  {
+   "name": "detection rate per bug class at frozen tau",
+   "metric": "share of mutants rejected",
+   "conditions": [
+    "off_by_one",
+    "flip_comparison",
+    "swap_args",
+    "wrong_init",
+    "drop_guard",
+    "early_exit",
+    "pooled"
+   ],
+   "status": "reported"
+  },
+  {
+   "name": "mutant detection minus natural wrong-draft detection",
+   "metric": "difference in rejection rate",
+   "conditions": [
+    "each bug class",
+    "pooled"
+   ],
+   "status": "reported"
+  },
+  {
+   "name": "mutant vs parent discrimination",
+   "metric": "P(p_parent > p_mutant), mean dp, caught rate",
+   "conditions": [
+    "each bug class",
+    "pooled"
+   ],
+   "status": "reported"
+  },
+  {
+   "name": "AUROC correct drafts vs mutants",
+   "metric": "AUROC",
+   "conditions": [
+    "each bug class",
+    "pooled",
+    "natural reference"
+   ],
+   "status": "reported"
+  },
+  {
+   "name": "visible tests catch rate vs judge detection",
+   "metric": "share of mutants failing visible tests",
+   "conditions": [
+    "each bug class",
+    "pooled"
+   ],
+   "status": "reported"
+  }
+ ]
+}

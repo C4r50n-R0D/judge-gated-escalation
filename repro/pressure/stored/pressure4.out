@@ -1,0 +1,11 @@
+== prompt vs generated token speed, medians (stored) ==
+local3b prefill 3804 decode 34.9 tokens in 131.0 out 76.5
+strong14b prefill 867 decode 6.1 tokens in 131.0 out 81.0
+tev seconds per label 1.45 14B seconds per draw 16.88 ratio 0.086 vs compute ratio 0.372
+== thin tests plus judge: run tev only on drafts that pass k tests ==
+k=1 stack acc +0.6 [-0.8, +2.1] compute -78 [-224, +70] | HE -1.4 [-3.7, +1.0] -940 [-1274, -601] FA 0.171
+   vs tests alone acc +2.1 [+0.6, +3.7] compute +2095 [+1954, +2244]
+k=2 stack acc +1.1 [-0.3, +2.6] compute -90 [-238, +50] | HE -0.4 [-2.7, +1.9] -941 [-1271, -601] FA 0.147
+   vs tests alone acc +1.0 [-0.3, +2.4] compute +1961 [+1812, +2109]
+k=3 stack acc +1.3 [-0.1, +2.7] compute -97 [-240, +49] | HE +0.2 [-1.9, +2.4] -948 [-1275, -631] FA 0.14
+   vs tests alone acc +0.7 [-0.5, +2.1] compute +1909 [+1765, +2066]

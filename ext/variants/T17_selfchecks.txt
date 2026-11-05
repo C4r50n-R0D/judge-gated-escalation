@@ -1,0 +1,14 @@
+he_distractor      tasks   44 not_transformed    8 selfcheck OK sha 1853126b0fcc def 1128755d42c15b0b
+he_drop_example    tasks   16 not_transformed   36 selfcheck OK sha 6344f0d4b361 def 4be4f3b4fc8c606a
+he_drop_sentence   tasks   33 not_transformed   19 selfcheck OK sha 64022bc40122 def 24804624700c963e
+he_padding_100     tasks   52 not_transformed    0 selfcheck OK sha be7dcaf0a152 def 8c5dda3c0169e5b7
+he_padding_1500    tasks   52 not_transformed    0 selfcheck OK sha e755153e7134 def 34be489fd9f63b58
+he_padding_400     tasks   52 not_transformed    0 selfcheck OK sha 36dc363d4575 def 09589305957c65ad
+he_rename_params   tasks   52 not_transformed    0 selfcheck OK sha 816375b09534 def c0a55fd00849c77c
+mb_distractor      tasks  119 not_transformed    0 selfcheck OK sha 1c039ce63b4f def 9f98ee39668a3a1d
+mb_drop_example    tasks    0 not_transformed  119 selfcheck FAIL sha e3b0c44298fc def 7187ef7bd7828476
+mb_drop_sentence   tasks    7 not_transformed  112 selfcheck OK sha 99730184c398 def 8e2c2d4d833b42d2
+mb_padding_100     tasks  119 not_transformed    0 selfcheck OK sha 0370000d4d1f def f72ca44d24772841
+mb_padding_1500    tasks  119 not_transformed    0 selfcheck OK sha 1f88a95225d9 def 04f5551b1597f125
+mb_padding_400     tasks  119 not_transformed    0 selfcheck OK sha 2a7515c07c08 def 609022c3c601d19e
+mb_rename_params   tasks  119 not_transformed    0 selfcheck OK sha 3d778173b13d def 99ef4b8c8c81e953

@@ -1,0 +1,62 @@
+ddf34ce 2026-10-09T20:23:15-04:00 Initial import of pre-registered study code (v1-draft)
+0cfd384 2026-10-09T20:23:33-04:00 Add split manifest and data checksums
+af219c0 2026-10-09T23:02:39-04:00 T3: scoring container selfcheck; set EvalPlus memory flags
+92e3ff7 2026-10-22T23:52:10-04:00 Local-only design: Tev1 and Llama judges, log-prob baseline, cost in seconds
+0e75057 2026-10-23T00:53:41-04:00 T10: orient; add KICKOFF2.md
+40ee624 2026-10-23T00:55:29-04:00 T11: draft PREREG v2 proposal (P1-P8 plus local-only redlines)
+cbf7646 2026-10-23T00:59:08-04:00 T12: four tiers, blocked collection order, load-free seconds, token-compute cost
+45ff142 2026-10-23T01:02:29-04:00 CLAUDE.md rule 1: two-stage collection (P3, approved by Carson)
+d227133 2026-10-23T03:55:14-04:00 T13: timing noise floor; cooldown guard for heat throttling
+8ba08a4 2026-10-23T04:11:04-04:00 T14: Stage 1 runner and Gate 1 v2 descriptives script
+680339e 2026-10-23T09:19:05-04:00 T16: variant framework for verified task transforms
+7c21c28 2026-10-23T10:13:16-04:00 T17: task transforms verified with EvalPlus; network-retry for collection
+f69ff5d 2026-10-23T10:15:29-04:00 T21: judge ensembles, recalibration and calibration metrics
+85a5547 2026-10-23T10:17:33-04:00 T22: spec-driven experiment runner and comparison counter
+65453a9 2026-10-23T10:18:35-04:00 T19 (prep): translate transform and back-translation quality check
+30fd107 2026-10-23T11:27:17-04:00 T18: candidate-code transforms verified with the official evaluator
+ac56b14 2026-10-23T11:49:45-04:00 T19: HumanEval-XL variants (23 languages) scored with EvalPlus
+e601a36 2026-10-23T23:00:23-04:00 T15: Gate 1 v2 fields proposed from Stage 1 (calibration split)
+bd0f7d6 2026-10-23T23:16:03-04:00 STOP A: token-compute as the primary cost; S1 and S2 in controllers.py test
+7b19918 2026-10-23T23:59:40-04:00 STOP A: PREREG v2 proposal for token-compute cost; H5 power-source script
+e6d9788 2026-10-24T00:28:43-04:00 Freeze PREREG v2 and thresholds (Gate 1 v2)
+421fcbc 2026-10-24T00:30:13-04:00 Post-freeze tooling: selfcheck allowlist file and blind Stage 2 runner
+b589e55 2026-10-24T01:18:25-04:00 DEVIATIONS: 96 early Stage 2 draws on battery; power guard added
+59bb559 2026-10-24T01:18:44-04:00 tools/power_guard_mac.sh: the Mac-side Stage 2 power guard (copy of the running script)
+3816acb 2026-10-24T13:39:03-04:00 DEVIATIONS: Stage 2 continues on battery at Carson's request; power guard off
+30c35cb 2026-10-25T13:36:24-04:00 kickoff2 log: T23-T25 done; T26 settings fixed before the run
+3aa793a 2026-10-25T13:42:14-04:00 T26: confirmatory test (controllers.py test, run once with frozen thresholds)
+8c6ab4f 2026-10-25T13:51:23-04:00 E12 spec, predictions and simulation script (exploratory, post-hoc after T26)
+0915a3c 2026-10-25T13:54:33-04:00 E2 spec and predictions; judge.py optional think flag; tools/judge_eval.py
+c829cf5 2026-10-25T14:19:32-04:00 E2 spec: fix pilot analyze step quoting (parentheses broke bash)
+4e79c67 2026-10-25T14:53:15-04:00 E12 result: visible-gate cascade best; judges add nothing on top of visible tests
+29509b3 2026-10-25T23:16:06-04:00 E14a spec, predictions and analysis script (calibration and drift, stored-data shifts)
+c2ae8a7 2026-10-25T23:16:39-04:00 E14a script: skip empty conditions (pilot subset had none for one condition)
+6d06c7d 2026-10-25T23:21:18-04:00 E14a result: tev tau transfers across generators; suite is the big shift; selfconf does not transfer; recal fixes ECE
+017bfdb 2026-10-26T01:08:31-04:00 E2 result: bigger judges tie tev; stacked ensemble +0.023 AUROC at 7x cost; no judge beats visible tests as a gate
+8bc11db 2026-10-26T23:08:17-04:00 E3 spec, predictions, prompt variants and analysis; judge.py optional prompt settings (main-study requests unchanged)
+d2e20e4 2026-10-26T23:21:35-04:00 E3 analysis: use drafts labeled by every variant; skip undefined bootstrap values (pilot labels 2 draws per task)
+b87934d 2026-10-26T23:22:25-04:00 E3 analysis: compute every spread family before the prompt-minus-model differences
+94d5fa8 2026-10-26T23:22:53-04:00 log: E3 pilot done, full run started
+0381b41 2026-10-27T07:20:22-04:00 E3 result: prompt sensitivity of tev and llama
+8b14e0e 2026-10-27T19:03:06-04:00 E4 spec, predictions and scripts (before any E4 label)
+c2c73cc 2026-10-27T20:49:08-04:00 E4 transform: report input rows per suite; log pilot
+8ebd78b 2026-10-27T21:57:29-04:00 rename_locals: never rename a name bound by def, class or import (E4 found a local shadowing a nested function)
+a6db462 2026-10-28T01:23:57-04:00 E4 result: judge surface invariance
+8e28559 2026-10-28T21:29:59-04:00 E5 spec, predictions and scripts (before any E5 label)
+f95f7b2 2026-10-28T22:02:00-04:00 log: E5 pilot done, full run started
+b31e522 2026-10-28T23:18:11-04:00 E5 result: judge detection of synthetic bugs
+30cf75c 2026-10-29T00:40:18-04:00 E6 spec, predictions and scripts (before any E6 label); judge.py optional delimit and system_suffix settings (main-study requests unchanged)
+72ad65f 2026-10-29T02:59:38-04:00 E6 analyze: matched tau for the no-defense condition is the frozen tau itself (pilot showed a rank-equivalent but different value)
+99be37d 2026-10-29T03:00:07-04:00 E6 analyze: matched tau keeps the frozen tau when it already gives the target calibration count, else the midpoint
+e452d1f 2026-10-29T03:00:15-04:00 log: E6 pilot done
+6e2a6fd 2026-10-29T03:02:31-04:00 log: E6 full run started
+bfcbe65 2026-10-29T03:13:01-04:00 E14b spec, predictions and script (before running; E6 numbers unseen)
+5246774 2026-10-29T03:13:01-04:00 Draft specs for E1, E7, E8, E10, E11; E7 canary task transform; E11 prompt templates (no draws yet)
+77fd54c 2026-10-29T03:13:01-04:00 E5 RESULT: vis&tev note corrected against the E12 simulation
+db557ca 2026-10-29T03:14:10-04:00 Queue homelab follow-up behind E6 inject: E14b pilot, section 11 pair sensitivity, variant builds
+b90da1c 2026-10-29T18:30:22-04:00 E6 result: injection canaries and defenses; pooled summaries; section 11 pair sensitivity (pairs.py --primary-judge fix)
+3c933fa 2026-11-01T14:45:42-05:00 E14b result; judge report card across T26 and E2-E14b
+a153d75 2026-11-01T14:47:41-05:00 Write-up draft (paper/DRAFT.md); limitations: Phase 4 section
+e5a9575 2026-11-03T21:47:24-05:00 Manuscript (Typst source, PDFs, figures); corrections to E14b RESULT, report card, limitations
+3f7ec41 2026-11-03T21:47:45-05:00 Manuscript: Figure 2 labels
+f046aa9 2026-11-03T23:45:50-05:00 Manuscript: disclose pre-registration history and verification checks; verification outputs

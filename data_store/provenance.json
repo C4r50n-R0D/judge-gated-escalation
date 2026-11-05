@@ -1,0 +1,26 @@
+{
+ "frozen_files": {
+  "PREREG.md": {
+   "sha256": "16496158d35f291d67a451450ad12e2b4a7b754807be7e152c0f34c9a31a2b27",
+   "git_blob": "034675db1660bd169e475bb4735c8f3f119606e4",
+   "blob_at_freeze": "034675db1660bd169e475bb4735c8f3f119606e4"
+  },
+  "controllers.py": {
+   "sha256": "a94eb2b22c64e120400668e7937d0f0b14d354b02406f05742c671baa2a06532",
+   "git_blob": "42ea9f016af3a4f7033ab7bc34a2edef9cb0f685",
+   "blob_at_freeze": "42ea9f016af3a4f7033ab7bc34a2edef9cb0f685"
+  },
+  "split_manifest.json": {
+   "sha256": "502677640222834d09fdfa4fbcfdf5e4415689cadb4da64a7dfda72ccb126363",
+   "git_blob": "ec97098ec52f8cdf2a97e2818a614199ec6830cb",
+   "blob_at_freeze": "ec97098ec52f8cdf2a97e2818a614199ec6830cb"
+  },
+  "thresholds.json": {
+   "sha256": "d404c976c470bb8f6fdd67a9a44fb93a90f283602fa152e21feb44940b1070cf",
+   "git_blob": "020c22be47a90882cad2ea1f7eb4449113365bca",
+   "blob_at_freeze": "020c22be47a90882cad2ea1f7eb4449113365bca"
+  }
+ },
+ "freeze_commit": "e6d97889d06d5dc46dc9c10c29d2a0bbaa03b1ff",
+ "freeze_commit_time": "2026-10-24T00:28:43-04:00"
+}

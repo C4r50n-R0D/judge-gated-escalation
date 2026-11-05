@@ -1,0 +1,10 @@
+split test: 10759 draws; by power source {'Battery Power': 836, 'AC Power': 9923}
+tier       power              n  s/draft mean   median
+local1p5b  AC Power        2794          1.47     1.12
+local1p5b  Battery Power    174          1.33     1.02
+local3b    AC Power        2799          3.22     2.46
+local3b    Battery Power    169          3.29     2.55
+local7b    AC Power        2714          8.24     6.55
+local7b    Battery Power    254          7.96     5.79
+strong14b  AC Power        1616         16.85    13.35
+strong14b  Battery Power    239         17.08    13.32

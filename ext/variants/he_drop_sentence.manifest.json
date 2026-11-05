@@ -1,0 +1,43 @@
+{
+ "name": "he_drop_sentence",
+ "definition": {
+  "base": "humaneval+",
+  "transform": "drop_sentence",
+  "version": 1,
+  "framework": 2,
+  "seed": 1,
+  "params": {},
+  "split": "cal"
+ },
+ "definition_sha": "24804624700c963e",
+ "n_tasks": 33,
+ "n_failed": 19,
+ "failures": {
+  "HumanEval/0": "transform not applicable",
+  "HumanEval/10": "transform not applicable",
+  "HumanEval/122": "transform not applicable",
+  "HumanEval/125": "transform not applicable",
+  "HumanEval/13": "transform not applicable",
+  "HumanEval/134": "transform not applicable",
+  "HumanEval/140": "transform not applicable",
+  "HumanEval/148": "transform not applicable",
+  "HumanEval/157": "transform not applicable",
+  "HumanEval/21": "transform not applicable",
+  "HumanEval/36": "transform not applicable",
+  "HumanEval/45": "transform not applicable",
+  "HumanEval/54": "transform not applicable",
+  "HumanEval/69": "transform not applicable",
+  "HumanEval/7": "transform not applicable",
+  "HumanEval/70": "transform not applicable",
+  "HumanEval/74": "transform not applicable",
+  "HumanEval/84": "transform not applicable",
+  "HumanEval/99": "transform not applicable"
+ },
+ "tasks_sha256": "64022bc4012258e5a25460ae544dfc3709bd068549024a78c2924776b9b82070",
+ "verification": {
+  "selfcheck": {
+   "ok": true,
+   "summary": "66 rows: reference failures 0, stub passes 0, unscored 0 SELFCHECK OK: the scoring bridge reproduces canonical correctness on real data "
+  }
+ }
+}

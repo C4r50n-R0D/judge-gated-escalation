@@ -1,0 +1,115 @@
+rows 15718 test tasks 371 cal 171
+===== local3b
+local acc/tok/sec [0.63, 760.742, 3.228]
+strong [0.752, 3751.373, 16.875]
+strong-local gap pts                              12.197 [    8.753,   15.478]
+tev reroute [0.748, 3870.464, 12.442]
+tev acc diff pts                                  -0.425 [   -1.961,    1.199]
+tev tok diff                                     119.091 [  -39.844,  296.129]
+tev sec diff                                      -4.433 [   -5.390,   -3.483]
+tev H3 reroute-resample pts                        6.264 [    3.762,    8.930]
+llama reroute [0.743, 5319.371, 17.996]
+llama acc diff pts                                -0.950 [   -2.204,    0.128]
+llama tok diff                                  1567.998 [ 1388.308, 1754.020]
+llama sec diff                                     1.121 [    0.407,    1.775]
+llama H3 reroute-resample pts                      7.807 [    4.885,   10.862]
+selfconf reroute [0.748, 3780.489, 16.59]
+selfconf acc diff pts                             -0.445 [   -1.078,    0.182]
+selfconf tok diff                                 29.116 [  -98.595,  158.138]
+selfconf sec diff                                 -0.285 [   -0.945,    0.349]
+selfconf H3 reroute-resample pts                   8.680 [    5.432,   11.938]
+vis reroute [0.766, 1819.853, 8.398]
+vis acc diff pts                                   1.381 [   -0.586,    3.396]
+vis tok diff                                   -1931.520 [-2088.683,-1756.083]
+vis sec diff                                      -8.477 [   -9.374,   -7.587]
+vis H3 reroute-resample pts                        5.166 [    2.939,    7.669]
+orc reroute [0.802, 2184.648, 10.063]
+orc acc diff pts                                   5.040 [    3.666,    6.523]
+orc tok diff                                   -1566.725 [-1735.808,-1385.833]
+orc sec diff                                      -6.813 [   -7.764,   -5.887]
+tev AUROC 0.813 ~CI 0.78 0.845
+llama AUROC 0.688 ~CI 0.648 0.73
+selfconf AUROC 0.68 ~CI 0.641 0.716
+tev reject 0.477 correct-among-rej 0.409 P(hidden|acc) 0.832
+llama reject 0.720 correct-among-rej 0.561 P(hidden|acc) 0.806
+selfconf reject 0.854 correct-among-rej 0.592 P(hidden|acc) 0.850
+vis reject 0.263 correct-among-rej 0.000 P(hidden|acc) 0.855
+hidden&!visible 0
+tev label 1396.7 frac14B 0.372 l 760.7 s 3751.4 breakeven r 0.425
+H4 hard n 106 FA hard 0.243 other 0.219
+S1 tev-local pts                                  11.772 [    9.057,   14.549]
+S1 tok 3110.0
+tev-visible pts                                   -1.806 [   -3.174,   -0.445]
+===== local7b
+local acc/tok/sec [0.715, 1805.041, 8.22]
+strong [0.752, 3751.373, 16.875]
+tev reroute [0.759, 4894.506, 17.579]
+tev acc diff pts                                   0.721 [   -0.620,    2.123]
+tev tok diff                                    1143.133 [  978.612, 1310.732]
+tev sec diff                                       0.704 [   -0.188,    1.575]
+tev H3 reroute-resample pts                        1.644 [   -0.749,    3.990]
+llama reroute [0.754, 6373.81, 23.13]
+llama acc diff pts                                 0.168 [   -0.768,    1.105]
+llama tok diff                                  2622.436 [ 2424.768, 2828.953]
+llama sec diff                                     6.255 [    5.481,    7.006]
+llama H3 reroute-resample pts                      1.385 [   -1.288,    4.276]
+selfconf reroute [0.746, 4379.148, 19.26]
+selfconf acc diff pts                             -0.620 [   -1.799,    0.546]
+selfconf tok diff                                627.775 [  483.994,  769.756]
+selfconf sec diff                                  2.384 [    1.571,    3.165]
+selfconf H3 reroute-resample pts                   1.694 [   -0.905,    4.369]
+vis reroute [0.786, 2571.594, 12.066]
+vis acc diff pts                                   3.403 [    1.368,    5.532]
+vis tok diff                                   -1179.779 [-1318.360,-1039.322]
+vis sec diff                                      -4.810 [   -5.617,   -3.942]
+vis H3 reroute-resample pts                        1.965 [    0.307,    3.766]
+orc reroute [0.821, 2941.207, 13.779]
+orc acc diff pts                                   6.853 [    5.222,    8.585]
+orc tok diff                                    -810.166 [ -962.276, -649.118]
+orc sec diff                                      -3.096 [   -3.970,   -2.194]
+tev AUROC 0.779 ~CI 0.742 0.816
+llama AUROC 0.681 ~CI 0.636 0.731
+selfconf AUROC 0.645 ~CI 0.593 0.692
+tev reject 0.479 correct-among-rej 0.549 P(hidden|acc) 0.867
+llama reject 0.741 correct-among-rej 0.667 P(hidden|acc) 0.850
+selfconf reject 0.756 correct-among-rej 0.677 P(hidden|acc) 0.831
+vis reject 0.179 correct-among-rej 0.000 P(hidden|acc) 0.870
+hidden&!visible 0
+===== local1p5b
+local acc/tok/sec [0.56, 337.758, 1.465]
+strong [0.752, 3751.373, 16.875]
+tev reroute [0.733, 3620.319, 11.947]
+tev acc diff pts                                  -1.867 [   -3.578,   -0.229]
+tev tok diff                                    -131.055 [ -289.473,   29.710]
+tev sec diff                                      -4.928 [   -5.762,   -4.091]
+tev H3 reroute-resample pts                       10.375 [    7.311,   13.590]
+llama reroute [0.731, 4718.899, 15.893]
+llama acc diff pts                                -2.082 [   -3.329,   -0.863]
+llama tok diff                                   967.526 [  800.214, 1138.161]
+llama sec diff                                    -0.982 [   -1.570,   -0.428]
+llama H3 reroute-resample pts                     13.593 [   10.174,   17.034]
+selfconf reroute [0.747, 3757.365, 16.758]
+selfconf acc diff pts                             -0.485 [   -0.937,   -0.088]
+selfconf tok diff                                  5.992 [  -85.904,   87.439]
+selfconf sec diff                                 -0.118 [   -0.568,    0.285]
+selfconf H3 reroute-resample pts                  15.084 [   11.154,   18.986]
+vis reroute [0.769, 1837.955, 8.848]
+vis acc diff pts                                   1.739 [   -0.142,    3.592]
+vis tok diff                                   -1913.418 [-2054.838,-1762.929]
+vis sec diff                                      -8.027 [   -8.813,   -7.233]
+vis H3 reroute-resample pts                       10.221 [    7.623,   13.125]
+orc reroute [0.799, 2103.504, 10.002]
+orc acc diff pts                                   4.724 [    3.410,    6.233]
+orc tok diff                                   -1647.869 [-1807.016,-1490.222]
+orc sec diff                                      -6.873 [   -7.700,   -6.066]
+tev AUROC 0.826 ~CI 0.797 0.854
+llama AUROC 0.718 ~CI 0.676 0.755
+selfconf AUROC 0.695 ~CI 0.66 0.728
+tev reject 0.526 correct-among-rej 0.336 P(hidden|acc) 0.808
+llama reject 0.697 correct-among-rej 0.471 P(hidden|acc) 0.764
+selfconf reject 0.929 correct-among-rej 0.540 P(hidden|acc) 0.824
+vis reject 0.358 correct-among-rej 0.000 P(hidden|acc) 0.872
+hidden&!visible 0
+split rows match manifest True
+split hash recomputed True
+Counter({'Mbpp': 378, 'HumanEval': 164})

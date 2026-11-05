@@ -1,0 +1,190 @@
+{
+ "id": "E3",
+ "title": "Judge prompt sensitivity",
+ "split": "any",
+ "steps": [
+  {
+   "name": "subset",
+   "cmd": "python3 ext/E3/subset.py runs/E2.labeled.jsonl runs/E3.j00.jsonl 100 50 20261026",
+   "pilot_cmd": "python3 ext/E3/subset.py runs/E2.labeled.jsonl runs/E3p.j00.jsonl 10 10 20261026"
+  },
+  {
+   "name": "judge_tev_p1",
+   "timeout_s": 10800,
+   "cmd": "python3 judge_label.py runs/E3.j00.jsonl ext/E3/config.json tev_p1 runs/E3.j01.jsonl --tiers local3b",
+   "pilot_cmd": "python3 judge_label.py runs/E3p.j00.jsonl ext/E3/config.json tev_p1 runs/E3p.j01.jsonl --tiers local3b --max-rep 2"
+  },
+  {
+   "name": "judge_tev_p2",
+   "timeout_s": 10800,
+   "cmd": "python3 judge_label.py runs/E3.j01.jsonl ext/E3/config.json tev_p2 runs/E3.j02.jsonl --tiers local3b",
+   "pilot_cmd": "python3 judge_label.py runs/E3p.j01.jsonl ext/E3/config.json tev_p2 runs/E3p.j02.jsonl --tiers local3b --max-rep 2"
+  },
+  {
+   "name": "judge_tev_p3",
+   "timeout_s": 10800,
+   "cmd": "python3 judge_label.py runs/E3.j02.jsonl ext/E3/config.json tev_p3 runs/E3.j03.jsonl --tiers local3b",
+   "pilot_cmd": "python3 judge_label.py runs/E3p.j02.jsonl ext/E3/config.json tev_p3 runs/E3p.j03.jsonl --tiers local3b --max-rep 2"
+  },
+  {
+   "name": "judge_tev_p4",
+   "timeout_s": 10800,
+   "cmd": "python3 judge_label.py runs/E3.j03.jsonl ext/E3/config.json tev_p4 runs/E3.j04.jsonl --tiers local3b",
+   "pilot_cmd": "python3 judge_label.py runs/E3p.j03.jsonl ext/E3/config.json tev_p4 runs/E3p.j04.jsonl --tiers local3b --max-rep 2"
+  },
+  {
+   "name": "judge_tev_p5",
+   "timeout_s": 10800,
+   "cmd": "python3 judge_label.py runs/E3.j04.jsonl ext/E3/config.json tev_p5 runs/E3.j05.jsonl --tiers local3b",
+   "pilot_cmd": "python3 judge_label.py runs/E3p.j04.jsonl ext/E3/config.json tev_p5 runs/E3p.j05.jsonl --tiers local3b --max-rep 2"
+  },
+  {
+   "name": "judge_tev_p6",
+   "timeout_s": 10800,
+   "cmd": "python3 judge_label.py runs/E3.j05.jsonl ext/E3/config.json tev_p6 runs/E3.j06.jsonl --tiers local3b",
+   "pilot_cmd": "python3 judge_label.py runs/E3p.j05.jsonl ext/E3/config.json tev_p6 runs/E3p.j06.jsonl --tiers local3b --max-rep 2"
+  },
+  {
+   "name": "judge_tev_nocrit",
+   "timeout_s": 10800,
+   "cmd": "python3 judge_label.py runs/E3.j06.jsonl ext/E3/config.json tev_nocrit runs/E3.j07.jsonl --tiers local3b",
+   "pilot_cmd": "python3 judge_label.py runs/E3p.j06.jsonl ext/E3/config.json tev_nocrit runs/E3p.j07.jsonl --tiers local3b --max-rep 2"
+  },
+  {
+   "name": "judge_tev_codeonly",
+   "timeout_s": 10800,
+   "cmd": "python3 judge_label.py runs/E3.j07.jsonl ext/E3/config.json tev_codeonly runs/E3.j08.jsonl --tiers local3b",
+   "pilot_cmd": "python3 judge_label.py runs/E3p.j07.jsonl ext/E3/config.json tev_codeonly runs/E3p.j08.jsonl --tiers local3b --max-rep 2"
+  },
+  {
+   "name": "judge_tev_codefirst",
+   "timeout_s": 10800,
+   "cmd": "python3 judge_label.py runs/E3.j08.jsonl ext/E3/config.json tev_codefirst runs/E3.j09.jsonl --tiers local3b",
+   "pilot_cmd": "python3 judge_label.py runs/E3p.j08.jsonl ext/E3/config.json tev_codefirst runs/E3p.j09.jsonl --tiers local3b --max-rep 2"
+  },
+  {
+   "name": "judge_llama_p1",
+   "timeout_s": 10800,
+   "cmd": "python3 judge_label.py runs/E3.j09.jsonl ext/E3/config.json llama_p1 runs/E3.j10.jsonl --tiers local3b",
+   "pilot_cmd": "python3 judge_label.py runs/E3p.j09.jsonl ext/E3/config.json llama_p1 runs/E3p.j10.jsonl --tiers local3b --max-rep 2"
+  },
+  {
+   "name": "judge_llama_p2",
+   "timeout_s": 10800,
+   "cmd": "python3 judge_label.py runs/E3.j10.jsonl ext/E3/config.json llama_p2 runs/E3.j11.jsonl --tiers local3b",
+   "pilot_cmd": "python3 judge_label.py runs/E3p.j10.jsonl ext/E3/config.json llama_p2 runs/E3p.j11.jsonl --tiers local3b --max-rep 2"
+  },
+  {
+   "name": "judge_llama_p3",
+   "timeout_s": 10800,
+   "cmd": "python3 judge_label.py runs/E3.j11.jsonl ext/E3/config.json llama_p3 runs/E3.j12.jsonl --tiers local3b",
+   "pilot_cmd": "python3 judge_label.py runs/E3p.j11.jsonl ext/E3/config.json llama_p3 runs/E3p.j12.jsonl --tiers local3b --max-rep 2"
+  },
+  {
+   "name": "judge_llama_p4",
+   "timeout_s": 10800,
+   "cmd": "python3 judge_label.py runs/E3.j12.jsonl ext/E3/config.json llama_p4 runs/E3.j13.jsonl --tiers local3b",
+   "pilot_cmd": "python3 judge_label.py runs/E3p.j12.jsonl ext/E3/config.json llama_p4 runs/E3p.j13.jsonl --tiers local3b --max-rep 2"
+  },
+  {
+   "name": "judge_llama_p5",
+   "timeout_s": 10800,
+   "cmd": "python3 judge_label.py runs/E3.j13.jsonl ext/E3/config.json llama_p5 runs/E3.j14.jsonl --tiers local3b",
+   "pilot_cmd": "python3 judge_label.py runs/E3p.j13.jsonl ext/E3/config.json llama_p5 runs/E3p.j14.jsonl --tiers local3b --max-rep 2"
+  },
+  {
+   "name": "judge_llama_p6",
+   "timeout_s": 10800,
+   "cmd": "python3 judge_label.py runs/E3.j14.jsonl ext/E3/config.json llama_p6 runs/E3.j15.jsonl --tiers local3b",
+   "pilot_cmd": "python3 judge_label.py runs/E3p.j14.jsonl ext/E3/config.json llama_p6 runs/E3p.j15.jsonl --tiers local3b --max-rep 2"
+  },
+  {
+   "name": "judge_llama_crit",
+   "timeout_s": 10800,
+   "cmd": "python3 judge_label.py runs/E3.j15.jsonl ext/E3/config.json llama_crit runs/E3.j16.jsonl --tiers local3b",
+   "pilot_cmd": "python3 judge_label.py runs/E3p.j15.jsonl ext/E3/config.json llama_crit runs/E3p.j16.jsonl --tiers local3b --max-rep 2"
+  },
+  {
+   "name": "judge_llama_codeonly",
+   "timeout_s": 10800,
+   "cmd": "python3 judge_label.py runs/E3.j16.jsonl ext/E3/config.json llama_codeonly runs/E3.j17.jsonl --tiers local3b",
+   "pilot_cmd": "python3 judge_label.py runs/E3p.j16.jsonl ext/E3/config.json llama_codeonly runs/E3p.j17.jsonl --tiers local3b --max-rep 2"
+  },
+  {
+   "name": "judge_llama_codefirst",
+   "timeout_s": 10800,
+   "cmd": "python3 judge_label.py runs/E3.j17.jsonl ext/E3/config.json llama_codefirst runs/E3.j18.jsonl --tiers local3b",
+   "pilot_cmd": "python3 judge_label.py runs/E3p.j17.jsonl ext/E3/config.json llama_codefirst runs/E3p.j18.jsonl --tiers local3b --max-rep 2"
+  },
+  {
+   "name": "analyze",
+   "timeout_s": 21600,
+   "cmd": "nice python3 tools/judge_eval.py runs/E3.j18.jsonl ext/E3/out_eval --judges tev,llama,selfconf,gemma,qwen35,qwen25i,tev_p1,tev_p2,tev_p3,tev_p4,tev_p5,tev_p6,tev_nocrit,tev_codeonly,tev_codefirst,llama_p1,llama_p2,llama_p3,llama_p4,llama_p5,llama_p6,llama_crit,llama_codeonly,llama_codefirst --ref tev && nice python3 ext/E3/analyze.py runs/E3.j18.jsonl ext/E3/out",
+   "pilot_cmd": "nice python3 tools/judge_eval.py runs/E3p.j18.jsonl ext/E3/pilot_eval --judges tev,llama,selfconf,gemma,qwen35,qwen25i,tev_p1,tev_p2,tev_p3,tev_p4,tev_p5,tev_p6,tev_nocrit,tev_codeonly,tev_codefirst,llama_p1,llama_p2,llama_p3,llama_p4,llama_p5,llama_p6,llama_crit,llama_codeonly,llama_codefirst --ref tev --boots 100 && nice python3 ext/E3/analyze.py runs/E3p.j18.jsonl ext/E3/pilot --boots 100"
+  }
+ ],
+ "comparisons": [
+  {
+   "name": "AUROC minus base, six paraphrases",
+   "metric": "AUROC difference",
+   "conditions": [
+    "tev p1-p6",
+    "llama p1-p6"
+   ],
+   "status": "reported"
+  },
+  {
+   "name": "criteria toggle vs base",
+   "metric": "AUROC difference, ECE",
+   "conditions": [
+    "tev without criteria",
+    "llama with criteria"
+   ],
+   "status": "reported"
+  },
+  {
+   "name": "code-only vs base",
+   "metric": "AUROC difference",
+   "conditions": [
+    "tev",
+    "llama"
+   ],
+   "status": "reported"
+  },
+  {
+   "name": "code-first order vs base",
+   "metric": "AUROC difference",
+   "conditions": [
+    "tev",
+    "llama"
+   ],
+   "status": "reported"
+  },
+  {
+   "name": "AUROC spread across prompts vs across models",
+   "metric": "SD and range of AUROC",
+   "conditions": [
+    "tev prompts",
+    "llama prompts",
+    "six models"
+   ],
+   "status": "reported"
+  },
+  {
+   "name": "transfer gate at frozen tau per variant",
+   "metric": "accept rate, false-accept, decision flips, judge->reroute accuracy and token-compute",
+   "conditions": [
+    "each variant"
+   ],
+   "status": "reported"
+  },
+  {
+   "name": "recal gate per variant",
+   "metric": "judge->reroute accuracy and token-compute",
+   "conditions": [
+    "each variant"
+   ],
+   "status": "reported"
+  }
+ ]
+}

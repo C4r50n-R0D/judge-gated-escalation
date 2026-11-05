@@ -1,0 +1,9 @@
+# Sandbox for scoring model-written code with the official EvalPlus evaluator, pinned to 0.3.1
+# (the version whose default datasets match suites.py: HumanEval+ v0.1.10, MBPP+ v0.2.0).
+# Build:  docker build -f Dockerfile.evalplus -t evalplus:0.3.1 .
+# Score:  docker run --rm --network none --memory 6g -e EVALPLUS_MAX_MEMORY_BYTES=8589934592 -v "$PWD/runs:/app" -v evalplus-cache:/root/.cache/evalplus evalplus:0.3.1 \
+#           evalplus.evaluate --parallel 1 --dataset humaneval --samples /app/pilot_he.jsonl
+# The first run needs network to download the dataset into the cache volume: run once without --network none.
+FROM python:3.11-slim
+RUN pip install --no-cache-dir "evalplus==0.3.1"
+WORKDIR /app

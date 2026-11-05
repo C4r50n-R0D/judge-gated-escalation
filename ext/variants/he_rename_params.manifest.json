@@ -1,0 +1,23 @@
+{
+ "name": "he_rename_params",
+ "definition": {
+  "base": "humaneval+",
+  "transform": "rename_params",
+  "version": 3,
+  "framework": 2,
+  "seed": 1,
+  "params": {},
+  "split": "cal"
+ },
+ "definition_sha": "c0a55fd00849c77c",
+ "n_tasks": 52,
+ "n_failed": 0,
+ "failures": {},
+ "tasks_sha256": "816375b09534dec1064c808d1017325420f70be837bee4cf1637c0c1ce16abe1",
+ "verification": {
+  "selfcheck": {
+   "ok": true,
+   "summary": "104 rows: reference failures 0, stub passes 0, unscored 0 SELFCHECK OK: the scoring bridge reproduces canonical correctness on real data "
+  }
+ }
+}

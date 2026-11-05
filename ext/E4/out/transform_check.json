@@ -1,0 +1,92 @@
+{
+ "strip_comments|humaneval+": {
+  "input": 408,
+  "transformed": 408,
+  "not_applicable": 0,
+  "code_unchanged": 0,
+  "verdict_changes": 0,
+  "visible_changes": 0,
+  "changed": []
+ },
+ "strip_comments|mbpp+": {
+  "input": 792,
+  "transformed": 791,
+  "not_applicable": 1,
+  "code_unchanged": 0,
+  "verdict_changes": 0,
+  "visible_changes": 0,
+  "changed": []
+ },
+ "reformat|humaneval+": {
+  "input": 408,
+  "transformed": 408,
+  "not_applicable": 0,
+  "code_unchanged": 0,
+  "verdict_changes": 0,
+  "visible_changes": 0,
+  "changed": []
+ },
+ "reformat|mbpp+": {
+  "input": 792,
+  "transformed": 791,
+  "not_applicable": 1,
+  "code_unchanged": 0,
+  "verdict_changes": 0,
+  "visible_changes": 0,
+  "changed": []
+ },
+ "rename_locals|humaneval+": {
+  "input": 408,
+  "transformed": 343,
+  "not_applicable": 65,
+  "code_unchanged": 0,
+  "verdict_changes": 0,
+  "visible_changes": 0,
+  "changed": []
+ },
+ "rename_locals|mbpp+": {
+  "input": 792,
+  "transformed": 535,
+  "not_applicable": 257,
+  "code_unchanged": 0,
+  "verdict_changes": 0,
+  "visible_changes": 0,
+  "changed": []
+ },
+ "verbose_comments|humaneval+": {
+  "input": 408,
+  "transformed": 408,
+  "not_applicable": 0,
+  "code_unchanged": 0,
+  "verdict_changes": 0,
+  "visible_changes": 0,
+  "changed": []
+ },
+ "verbose_comments|mbpp+": {
+  "input": 792,
+  "transformed": 790,
+  "not_applicable": 2,
+  "code_unchanged": 0,
+  "verdict_changes": 0,
+  "visible_changes": 0,
+  "changed": []
+ },
+ "reorder_helpers|humaneval+": {
+  "input": 408,
+  "transformed": 21,
+  "not_applicable": 387,
+  "code_unchanged": 0,
+  "verdict_changes": 0,
+  "visible_changes": 0,
+  "changed": []
+ },
+ "reorder_helpers|mbpp+": {
+  "input": 792,
+  "transformed": 2,
+  "not_applicable": 790,
+  "code_unchanged": 0,
+  "verdict_changes": 0,
+  "visible_changes": 0,
+  "changed": []
+ }
+}

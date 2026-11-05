@@ -1,0 +1,98 @@
+{
+ "off_by_one|humaneval+": {
+  "input": 343,
+  "mutated": 135,
+  "not_applicable": 208,
+  "kept": 126,
+  "dropped_as_possibly_equivalent": 9,
+  "kept_visible_fail": 113
+ },
+ "off_by_one|mbpp+": {
+  "input": 477,
+  "mutated": 155,
+  "not_applicable": 322,
+  "kept": 139,
+  "dropped_as_possibly_equivalent": 16,
+  "kept_visible_fail": 126
+ },
+ "flip_comparison|humaneval+": {
+  "input": 343,
+  "mutated": 185,
+  "not_applicable": 158,
+  "kept": 167,
+  "dropped_as_possibly_equivalent": 18,
+  "kept_visible_fail": 143
+ },
+ "flip_comparison|mbpp+": {
+  "input": 477,
+  "mutated": 214,
+  "not_applicable": 263,
+  "kept": 189,
+  "dropped_as_possibly_equivalent": 25,
+  "kept_visible_fail": 170
+ },
+ "swap_args|humaneval+": {
+  "input": 343,
+  "mutated": 89,
+  "not_applicable": 254,
+  "kept": 74,
+  "dropped_as_possibly_equivalent": 15,
+  "kept_visible_fail": 74
+ },
+ "swap_args|mbpp+": {
+  "input": 477,
+  "mutated": 155,
+  "not_applicable": 322,
+  "kept": 128,
+  "dropped_as_possibly_equivalent": 27,
+  "kept_visible_fail": 128
+ },
+ "wrong_init|humaneval+": {
+  "input": 343,
+  "mutated": 105,
+  "not_applicable": 238,
+  "kept": 92,
+  "dropped_as_possibly_equivalent": 13,
+  "kept_visible_fail": 90
+ },
+ "wrong_init|mbpp+": {
+  "input": 477,
+  "mutated": 109,
+  "not_applicable": 368,
+  "kept": 98,
+  "dropped_as_possibly_equivalent": 11,
+  "kept_visible_fail": 96
+ },
+ "drop_guard|humaneval+": {
+  "input": 343,
+  "mutated": 88,
+  "not_applicable": 255,
+  "kept": 62,
+  "dropped_as_possibly_equivalent": 26,
+  "kept_visible_fail": 58
+ },
+ "drop_guard|mbpp+": {
+  "input": 477,
+  "mutated": 18,
+  "not_applicable": 459,
+  "kept": 12,
+  "dropped_as_possibly_equivalent": 6,
+  "kept_visible_fail": 12
+ },
+ "early_exit|humaneval+": {
+  "input": 343,
+  "mutated": 161,
+  "not_applicable": 182,
+  "kept": 161,
+  "dropped_as_possibly_equivalent": 0,
+  "kept_visible_fail": 149
+ },
+ "early_exit|mbpp+": {
+  "input": 477,
+  "mutated": 127,
+  "not_applicable": 350,
+  "kept": 126,
+  "dropped_as_possibly_equivalent": 1,
+  "kept_visible_fail": 122
+ }
+}

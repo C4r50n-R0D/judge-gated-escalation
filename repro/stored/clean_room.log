@@ -1,0 +1,46 @@
+Python 3.11.17
+224 files match CHECKSUMS.sha256
+unpacked into runs/
+== tests
+PASS paired AUROC difference: perfect x vs weak y = 1.0 - 0.25 (got 0.75)
+
+0 failures
+== confirm
+Wed Nov  4 05:57:08 UTC 2026
+test coverage: 371/371 tasks usable (0.0% missing)
+wrote repro_out/T26_report.md and repro_out/T26_results.json
+CONFIRMED: report identical to runs/T26_report.md (two-stage line excluded)
+== independent
+INDEPENDENT-IDENTICAL
+== exploratory
+Wed Nov  4 05:59:16 UTC 2026
+E2     judges.json              DIFFERENT  (8987s)
+E2     judges.md                identical  (8987s)
+E3     judges.json              DIFFERENT  (1551s)
+E3     judges.md                identical  (1551s)
+E4     e4.json                  DIFFERENT  (25s)
+E4     e4.md                    identical  (25s)
+E5     e5.json                  DIFFERENT  (30s)
+E5     e5.md                    identical  (30s)
+E6     e6.json                  DIFFERENT  (50s)
+E6     e6.md                    identical  (50s)
+E12    results.json             DIFFERENT  (4132s)
+E12    summary.md               identical  (4132s)
+E14    results.json             DIFFERENT  (231s)
+E14    summary.md               identical  (231s)
+E14b   results.json             DIFFERENT  (216s)
+E14b   summary.md               identical  (216s)
+E6     e6.json                  DIFFERENT  (4s)
+E6     e6.md                    identical  (4s)
+E6     e6_pooled.json           DIFFERENT  (4s)
+E6     e6_pooled.md             identical  (4s)
+
+10 identical, 10 different, 0 failed
+Wed Nov  4 10:13:02 UTC 2026
+== pressure
+Wed Nov  4 10:13:39 UTC 2026
+   MBPP+                                     acc +0.3 [-1.8, +2.3]  compute +343 [+187, +494]  H2 fail
+== e same rule, different bootstrap seeds (20) ==
+tau values [0.863 0.864 0.867 0.871 0.873 0.876]
+acc -0.39 -0.2 compute 121.0 231.0 upper bound <0 in 0 of 20
+ALLDONE

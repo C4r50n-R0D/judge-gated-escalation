@@ -1,0 +1,7 @@
+corrected distinct 23
+rows flipped {'local3b': 9, 'strong14b': 12, 'local7b': 3, 'local1p5b': 6}
+3B acc 0.6301 -> 0.6331 14B 0.752 -> 0.7585
+tev (corrected labels)                       acc -0.5 [-2.0, +1.1]  compute +119 [-50, +292]  H2 fail
+llama (corrected labels)                     acc -1.0 [-2.1, +0.1]  compute +1568 [+1391, +1758]  H2 fail
+selfconf (corrected labels)                  acc -0.5 [-1.1, +0.2]  compute +29 [-108, +160]  H2 fail
+visible (corrected labels)                   acc +1.4 [-0.6, +3.4]  compute -1946 [-2109, -1772]  H2 PASS

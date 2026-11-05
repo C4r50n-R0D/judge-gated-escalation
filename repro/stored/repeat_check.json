@@ -1,0 +1,319 @@
+{
+ "draws": [
+  {
+   "tier": "local3b",
+   "task": "Mbpp/109",
+   "rep": 0,
+   "identical": true,
+   "tokens_stored": 67,
+   "tokens_now": 67
+  },
+  {
+   "tier": "local3b",
+   "task": "HumanEval/61",
+   "rep": 5,
+   "identical": true,
+   "tokens_stored": 72,
+   "tokens_now": 72
+  },
+  {
+   "tier": "local3b",
+   "task": "Mbpp/305",
+   "rep": 5,
+   "identical": true,
+   "tokens_stored": 85,
+   "tokens_now": 85
+  },
+  {
+   "tier": "local3b",
+   "task": "Mbpp/281",
+   "rep": 5,
+   "identical": true,
+   "tokens_stored": 42,
+   "tokens_now": 42
+  },
+  {
+   "tier": "local3b",
+   "task": "HumanEval/87",
+   "rep": 5,
+   "identical": true,
+   "tokens_stored": 69,
+   "tokens_now": 69
+  },
+  {
+   "tier": "local3b",
+   "task": "Mbpp/20",
+   "rep": 4,
+   "identical": true,
+   "tokens_stored": 31,
+   "tokens_now": 31
+  },
+  {
+   "tier": "local3b",
+   "task": "HumanEval/101",
+   "rep": 5,
+   "identical": true,
+   "tokens_stored": 130,
+   "tokens_now": 130
+  },
+  {
+   "tier": "local3b",
+   "task": "HumanEval/6",
+   "rep": 5,
+   "identical": true,
+   "tokens_stored": 194,
+   "tokens_now": 194
+  },
+  {
+   "tier": "local3b",
+   "task": "Mbpp/580",
+   "rep": 3,
+   "identical": true,
+   "tokens_stored": 82,
+   "tokens_now": 82
+  },
+  {
+   "tier": "local3b",
+   "task": "HumanEval/137",
+   "rep": 3,
+   "identical": true,
+   "tokens_stored": 182,
+   "tokens_now": 182
+  },
+  {
+   "tier": "local3b",
+   "task": "HumanEval/114",
+   "rep": 5,
+   "identical": true,
+   "tokens_stored": 139,
+   "tokens_now": 139
+  },
+  {
+   "tier": "local3b",
+   "task": "HumanEval/7",
+   "rep": 0,
+   "identical": true,
+   "tokens_stored": 105,
+   "tokens_now": 105
+  },
+  {
+   "tier": "local1p5b",
+   "task": "Mbpp/463",
+   "rep": 0,
+   "identical": true,
+   "tokens_stored": 103,
+   "tokens_now": 103
+  },
+  {
+   "tier": "local1p5b",
+   "task": "Mbpp/118",
+   "rep": 0,
+   "identical": true,
+   "tokens_stored": 17,
+   "tokens_now": 17
+  },
+  {
+   "tier": "local1p5b",
+   "task": "Mbpp/87",
+   "rep": 4,
+   "identical": true,
+   "tokens_stored": 34,
+   "tokens_now": 34
+  },
+  {
+   "tier": "local1p5b",
+   "task": "Mbpp/635",
+   "rep": 0,
+   "identical": true,
+   "tokens_stored": 220,
+   "tokens_now": 220
+  },
+  {
+   "tier": "local1p5b",
+   "task": "Mbpp/556",
+   "rep": 0,
+   "identical": true,
+   "tokens_stored": 79,
+   "tokens_now": 79
+  },
+  {
+   "tier": "local1p5b",
+   "task": "Mbpp/572",
+   "rep": 4,
+   "identical": true,
+   "tokens_stored": 50,
+   "tokens_now": 50
+  },
+  {
+   "tier": "strong14b",
+   "task": "Mbpp/739",
+   "rep": 2,
+   "identical": true,
+   "tokens_stored": 64,
+   "tokens_now": 64
+  },
+  {
+   "tier": "strong14b",
+   "task": "Mbpp/297",
+   "rep": 1,
+   "identical": true,
+   "tokens_stored": 176,
+   "tokens_now": 176
+  },
+  {
+   "tier": "strong14b",
+   "task": "Mbpp/798",
+   "rep": 0,
+   "identical": true,
+   "tokens_stored": 63,
+   "tokens_now": 63
+  }
+ ],
+ "labels": [
+  {
+   "judge": "tev",
+   "task": "Mbpp/239",
+   "rep": 1,
+   "stored": 0.09398110452336025,
+   "now": 0.09907692161211311,
+   "abs_diff": 0.005095817088752855,
+   "same_verdict": true
+  },
+  {
+   "judge": "tev",
+   "task": "Mbpp/240",
+   "rep": 7,
+   "stored": 0.7976753467101747,
+   "now": 0.7988477718618474,
+   "abs_diff": 0.0011724251516727069,
+   "same_verdict": true
+  },
+  {
+   "judge": "tev",
+   "task": "Mbpp/301",
+   "rep": 7,
+   "stored": 0.6514206995207843,
+   "now": 0.6504798399083159,
+   "abs_diff": 0.0009408596124683699,
+   "same_verdict": true
+  },
+  {
+   "judge": "tev",
+   "task": "Mbpp/590",
+   "rep": 3,
+   "stored": 0.37302340730002964,
+   "now": 0.36868844613575824,
+   "abs_diff": 0.0043349611642714,
+   "same_verdict": true
+  },
+  {
+   "judge": "tev",
+   "task": "Mbpp/267",
+   "rep": 1,
+   "stored": 0.7616683562768964,
+   "now": 0.7545990088696909,
+   "abs_diff": 0.007069347407205551,
+   "same_verdict": true
+  },
+  {
+   "judge": "tev",
+   "task": "Mbpp/731",
+   "rep": 6,
+   "stored": 0.9678526808188646,
+   "now": 0.9675067526120145,
+   "abs_diff": 0.00034592820685008796,
+   "same_verdict": true
+  },
+  {
+   "judge": "tev",
+   "task": "Mbpp/559",
+   "rep": 5,
+   "stored": 0.8983644130975078,
+   "now": 0.9012980195842547,
+   "abs_diff": 0.002933606486746898,
+   "same_verdict": true
+  },
+  {
+   "judge": "tev",
+   "task": "Mbpp/760",
+   "rep": 4,
+   "stored": 0.9773023592764432,
+   "now": 0.9775923859556904,
+   "abs_diff": 0.0002900266792472683,
+   "same_verdict": true
+  },
+  {
+   "judge": "llama",
+   "task": "HumanEval/110",
+   "rep": 6,
+   "stored": 0.15437456291079282,
+   "now": 0.15437456291079282,
+   "abs_diff": 0.0,
+   "same_verdict": true
+  },
+  {
+   "judge": "llama",
+   "task": "Mbpp/448",
+   "rep": 1,
+   "stored": 0.27572865795301565,
+   "now": 0.27572865795301565,
+   "abs_diff": 0.0,
+   "same_verdict": true
+  },
+  {
+   "judge": "llama",
+   "task": "Mbpp/119",
+   "rep": 1,
+   "stored": 0.07643491108803889,
+   "now": 0.07643491108803889,
+   "abs_diff": 0.0,
+   "same_verdict": true
+  },
+  {
+   "judge": "llama",
+   "task": "Mbpp/594",
+   "rep": 0,
+   "stored": 0.08474373510594742,
+   "now": 0.08474373510594742,
+   "abs_diff": 0.0,
+   "same_verdict": true
+  },
+  {
+   "judge": "llama",
+   "task": "Mbpp/77",
+   "rep": 5,
+   "stored": 0.202927559517366,
+   "now": 0.202927559517366,
+   "abs_diff": 0.0,
+   "same_verdict": true
+  },
+  {
+   "judge": "llama",
+   "task": "Mbpp/475",
+   "rep": 1,
+   "stored": 0.41490952743612436,
+   "now": 0.41490952743612436,
+   "abs_diff": 0.0,
+   "same_verdict": true
+  },
+  {
+   "judge": "llama",
+   "task": "Mbpp/17",
+   "rep": 0,
+   "stored": 0.5355792144174042,
+   "now": 0.5355792144174042,
+   "abs_diff": 0.0,
+   "same_verdict": true
+  },
+  {
+   "judge": "llama",
+   "task": "HumanEval/18",
+   "rep": 0,
+   "stored": 0.1680109198861242,
+   "now": 0.1680109198861242,
+   "abs_diff": 0.0,
+   "same_verdict": true
+  }
+ ],
+ "ollama": "0.40.8"
+}

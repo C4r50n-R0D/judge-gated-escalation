@@ -1,0 +1,86 @@
+== 0 baseline (test split, exact) ==
+tev                                          acc -0.4 [-1.9, +1.2]  compute +119 [-50, +292]  H2 fail
+llama                                        acc -1.0 [-2.1, +0.1]  compute +1568 [+1391, +1758]  H2 fail
+selfconf                                     acc -0.4 [-1.1, +0.2]  compute +29 [-108, +160]  H2 fail
+visible                                      acc +1.4 [-0.5, +3.4]  compute -1932 [-2093, -1759]  H2 PASS
+
+== 1 by suite ==
+HumanEval+ 112 tasks; reject tev 0.239 break-even 0.428
+  tev                                        acc -2.8 [-5.6, -0.1]  compute -837 [-1232, -430]  H2 fail
+  visible                                    acc -0.2 [-2.4, +2.0]  compute -3036 [-3392, -2675]  H2 PASS
+MBPP+ 259 tasks; reject tev 0.581 break-even 0.423
+  tev                                        acc +0.6 [-1.2, +2.5]  compute +533 [+381, +684]  H2 fail
+  visible                                    acc +2.1 [-0.7, +4.7]  compute -1454 [-1590, -1313]  H2 PASS
+
+== 2 cost-metric sensitivity, tev gate ==
+judge charged at 100%                        acc -0.4 [-2.0, +1.2]  compute +119 [-54, +291]  H2 fail
+judge charged at 75%                         acc -0.4 [-2.0, +1.2]  compute -230 [-404, -54]  H2 PASS
+judge charged at 50%                         acc -0.4 [-2.0, +1.2]  compute -579 [-751, -396]  H2 PASS
+judge charged at 25%                         acc -0.4 [-2.0, +1.1]  compute -928 [-1114, -749]  H2 PASS
+judge charged at 0%                          acc -0.4 [-2.0, +1.2]  compute -1278 [-1465, -1094]  H2 PASS
+generated tokens only for generators         acc -0.4 [-2.0, +1.2]  compute +872 [+791, +955]  H2 fail
+cost ~ params^0.5                            acc -0.4 [-2.1, +1.1]  compute +584 [+535, +632]  H2 fail
+cost ~ params^2                              acc -0.4 [-2.1, +1.2]  compute -21943 [-24743, -19188]  H2 PASS
+seconds tev-strong -4.43 [-5.40, -3.49]
+
+== 3 threshold-rule sensitivity: rule on calibration, gate on test ==
+tev lb_half  tau 0.873 reject 0.50                                               acc -0.2 [-1.7, +1.2]  compute +210 [+36, +380]  H2 fail
+tev lb_full  tau 0.813 reject 0.40                                               acc -1.1 [-2.8, +0.7]  compute -129 [-295, +35]  H2 fail
+tev pt_half  tau 0.639 reject 0.26                                               acc -4.3 [-6.6, -2.0]  compute -641 [-778, -491]  H2 fail
+tev pt_full  tau 0.539 reject 0.21                                               acc -5.4 [-7.9, -3.1]  compute -806 [-942, -661]  H2 fail
+tev pt_zero  tau 0.799 reject 0.38                                               acc -1.4 [-3.2, +0.3]  compute -202 [-362, -35]  H2 fail
+llama lb_half  tau 0.467 reject 0.72                                               acc -1.0 [-2.1, +0.1]  compute +1568 [+1392, +1752]  H2 fail
+llama lb_full  tau 0.340 reject 0.57                                               acc -2.5 [-4.2, -0.8]  compute +1005 [+815, +1193]  H2 fail
+llama pt_half  tau 0.228 reject 0.40                                               acc -4.7 [-6.6, -2.7]  compute +372 [+190, +554]  H2 fail
+llama pt_full  tau 0.143 reject 0.26                                               acc -6.6 [-9.2, -4.2]  compute -178 [-327, -21]  H2 fail
+llama pt_zero  tau 0.467 reject 0.72                                               acc -1.0 [-2.1, +0.1]  compute +1567 [+1390, +1750]  H2 fail
+
+== 4 descriptive sweep on test: does ANY tev tau pass H2? ==
+1 of 200 taus pass; tau range 0.809-0.809, acc -1.2 to -1.2 pts, compute -159 to -159
+
+== 5 resplit stability: 200 random 171/371 splits, frozen rule (coarse) ==
+tev tau median 0.906 IQR 0.872-0.930
+tev acc diff pts median +0.45, range -2.53..+1.33; compute median +362 range -444..+1024
+tev H2 pass share 0.025; point estimate cheaper share 0.190; noninferior share 0.920
+visible H2 pass share 1.0
+
+== 6 exclusions and influence ==
+tev, without 2 always-fail tasks             acc -0.4 [-2.0, +1.2]  compute +106 [-71, +283]  H2 fail
+visible, without 2 always-fail tasks         acc +1.4 [-0.6, +3.4]  compute -1950 [-2107, -1781]  H2 PASS
+drop 1 tasks where tev cost most: compute +102 [-86, +271]; drop 1 where cheapest: +132 [-38, +301]
+drop 5 tasks where tev cost most: compute +52 [-109, +218]; drop 5 where cheapest: +176 [+8, +347]
+drop 10 tasks where tev cost most: compute +9 [-153, +169]; drop 10 where cheapest: +224 [+55, +390]
+drop 18 tasks where tev cost most: compute -54 [-222, +105]; drop 18 where cheapest: +293 [+128, +457]
+per-replicate (draft rep r only, one 14B mean):
+ rep0 acc -1.0 compute +126; rep1 acc -0.3 compute +189; rep2 acc +0.2 compute +57; rep3 acc +0.9 compute -40; rep4 acc +0.0 compute +104; rep5 acc -0.6 compute +108; rep6 acc -0.8 compute +158; rep7 acc -1.8 compute +249;
+
+== 7 margin sensitivity ==
+0.01 {'tev': False, 'llama': False, 'selfconf': False, 'visible': True}
+0.015 {'tev': False, 'llama': False, 'selfconf': True, 'visible': True}
+0.02 {'tev': False, 'llama': False, 'selfconf': True, 'visible': True}
+0.03 {'tev': True, 'llama': True, 'selfconf': True, 'visible': True}
+
+== 8 how expensive could tests be? ==
+saving per task: compute 1932 seconds 8.5 upper-bound-preserving compute charge 1760
+vs tev: visible wins compute until test charge 2051
+
+== 9 weak tests: gate on first k original tests only ==
+unmatched 0 failed-without-a-recorded-test 174 of 782 failed drafts
+base tests per task median 3.0 HE 7.0 MBPP 3.0
+first 1 test(s), unknown failures reject     acc -1.5 [-3.7, +0.7]  compute -2172 [-2329, -2012]  H2 fail
+first 1 test(s), unknown failures accept     acc -4.2 [-6.7, -1.9]  compute -2401 [-2540, -2260]  H2 fail
+first 2 test(s), unknown failures reject     acc +0.1 [-2.1, +2.2]  compute -2050 [-2215, -1888]  H2 PASS
+first 2 test(s), unknown failures accept     acc -2.6 [-4.9, -0.3]  compute -2279 [-2423, -2137]  H2 fail
+first 3 test(s), unknown failures reject     acc +0.5 [-1.6, +2.7]  compute -2006 [-2171, -1843]  H2 PASS
+first 3 test(s), unknown failures accept     acc -2.1 [-4.3, +0.1]  compute -2235 [-2380, -2087]  H2 fail
+first 5 test(s), unknown failures reject     acc +1.0 [-1.0, +3.1]  compute -1978 [-2138, -1811]  H2 PASS
+first 5 test(s), unknown failures accept     acc -1.7 [-3.8, +0.6]  compute -2207 [-2355, -2071]  H2 fail
+first 10 test(s), unknown failures reject    acc +1.3 [-0.7, +3.2]  compute -1940 [-2101, -1769]  H2 PASS
+first 10 test(s), unknown failures accept    acc -1.4 [-3.5, +0.7]  compute -2169 [-2314, -2026]  H2 fail
+k=1 false accept among wrong drafts 0.443 visible 0.288 tev 0.237 reject 0.206
+k=1 by suite
+  HE                                         acc -6.5 [-10.4, -2.9]  compute -3530 [-3826, -3218]  H2 fail
+  MBPP                                       acc +0.7 [-1.9, +3.4]  compute -1585 [-1712, -1446]  H2 PASS
+
+== 10 what judge skill would be needed? (synthetic judge, tev call price) ==
+oracle judge at tev price                    acc +5.0 [+3.7, +6.6]  compute -170 [-340, +5]  H2 fail

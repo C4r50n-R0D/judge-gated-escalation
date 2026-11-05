@@ -1,0 +1,25 @@
+{
+ "name": "he_padding_1500",
+ "definition": {
+  "base": "humaneval+",
+  "transform": "padding",
+  "version": 2,
+  "framework": 2,
+  "seed": 1,
+  "params": {
+   "words": 1500
+  },
+  "split": "cal"
+ },
+ "definition_sha": "34be489fd9f63b58",
+ "n_tasks": 52,
+ "n_failed": 0,
+ "failures": {},
+ "tasks_sha256": "e755153e7134301860e712f5271206fd80071d62b0967a54f3e94085b90b83ad",
+ "verification": {
+  "selfcheck": {
+   "ok": true,
+   "summary": "104 rows: reference failures 0, stub passes 0, unscored 0 SELFCHECK OK: the scoring bridge reproduces canonical correctness on real data "
+  }
+ }
+}

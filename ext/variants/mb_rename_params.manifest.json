@@ -1,0 +1,23 @@
+{
+ "name": "mb_rename_params",
+ "definition": {
+  "base": "mbpp+",
+  "transform": "rename_params",
+  "version": 3,
+  "framework": 2,
+  "seed": 1,
+  "params": {},
+  "split": "cal"
+ },
+ "definition_sha": "99ef4b8c8c81e953",
+ "n_tasks": 119,
+ "n_failed": 0,
+ "failures": {},
+ "tasks_sha256": "3d778173b13de4388cc0ace8fcd3865e6abaa45788be875ebea315ff8fad8c73",
+ "verification": {
+  "selfcheck": {
+   "ok": true,
+   "summary": "238 rows: reference failures 0, stub passes 0, unscored 0 SELFCHECK OK: the scoring bridge reproduces canonical correctness on real data "
+  }
+ }
+}

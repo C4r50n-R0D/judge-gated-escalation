@@ -1,0 +1,32 @@
+{
+ "name": "he_distractor",
+ "definition": {
+  "base": "humaneval+",
+  "transform": "distractor",
+  "version": 3,
+  "framework": 2,
+  "seed": 1,
+  "params": {},
+  "split": "cal"
+ },
+ "definition_sha": "1128755d42c15b0b",
+ "n_tasks": 44,
+ "n_failed": 8,
+ "failures": {
+  "HumanEval/125": "transform not applicable",
+  "HumanEval/134": "transform not applicable",
+  "HumanEval/148": "transform not applicable",
+  "HumanEval/157": "transform not applicable",
+  "HumanEval/69": "transform not applicable",
+  "HumanEval/70": "transform not applicable",
+  "HumanEval/74": "transform not applicable",
+  "HumanEval/99": "transform not applicable"
+ },
+ "tasks_sha256": "1853126b0fccbfbdeaa3f9cc1bee3a2685aaa2ba0f0b3db27a9869a2b9c87244",
+ "verification": {
+  "selfcheck": {
+   "ok": true,
+   "summary": "88 rows: reference failures 0, stub passes 0, unscored 0 SELFCHECK OK: the scoring bridge reproduces canonical correctness on real data "
+  }
+ }
+}
