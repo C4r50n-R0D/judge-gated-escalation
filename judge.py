@@ -2,17 +2,15 @@
 """Outcome-blind judges: estimate P(candidate solution is correct) WITHOUT running any tests.
 A judge sees only the task text and the candidate code: never tests, test output, or other draws.
 Backends:
-  tev             Together AI's open Tev1 decision model served by a local Ollama (/v1/systemone, Jev's API). Free.
+  tev             Together AI's open Tev1 decision model served by a local Ollama (/v1/systemone). Free.
   ollama_logprob  a local model asked YES/NO once at temperature 0; probability = P(YES) / (P(YES) + P(NO)) read
                   from the first token's log-probabilities, summing every spelling (YES, Yes, yes, ...). Free.
   selfconf        the generator's own confidence: exp(mean token log-probability) recorded by bench.py. Free; no call.
-  jev             TypeSafe's Jev decision model via OpenRouter (hosted; needs OPENROUTER_API_KEY). Not used locally.
-  ollama/claude   a model asked YES/NO; probability = share of YES among N sampled votes. Not used locally.
 Config block in config.json:  "judges": {"tev": {"kind":"tev","base_url":...,"model":"tev1:4b"}, "llama": {"kind":"ollama_logprob","tier":"llamajudge"}, ...}
   python judge.py selftest config.json tev     # prints RAW responses for one right and one wrong solution; run this first
 """
-import json, os, sys, time, re, hashlib, math
-from bench import http_json, gen_ollama, gen_anthropic
+import json, sys, time, re, hashlib, math
+from bench import http_json
 
 QUESTION = ("Does `candidate_code` correctly and completely solve `task`, including edge cases? "
             "Judge only from the text. The code has NOT been run.")
@@ -41,12 +39,6 @@ def yesno_prompt(task_text, code, cfg=None):
     crit = f"Correct means: {CRIT_TRUE}\nWrong means: {CRIT_FALSE}\n\n" if cfg.get("criteria") else ""
     return body + crit + cfg.get("question", YESNO_Q)
 
-def parse_vote(text):
-    """YES / NO from a reply, tolerating markdown, punctuation and case ('**Yes.**' -> YES). Anything else -> None,
-    which counts as NO and is reported as unparseable."""
-    m = re.match(r"[^A-Za-z]*(yes|no)\b", text or "", re.I)
-    return m.group(1).upper() if m else None
-
 def config_hash(jc):
     """Hash of everything that changes a judge's output; part of the cache key, so changing votes or model never
     silently reuses old probabilities."""
@@ -55,7 +47,7 @@ def config_hash(jc):
     return hashlib.sha256(json.dumps([keep, QUESTION, CRIT_TRUE, CRIT_FALSE, YESNO_SYS, yesno_prompt("T", "C")], sort_keys=True).encode()).hexdigest()[:12]
 
 def decision_body(model, task_text, code, cfg=None):
-    """Jev's request shape, also served for Tev1 by Ollama's /v1/systemone. Optional prompt settings (E3, exploratory;
+    """The decision request served for Tev1 by Ollama's /v1/systemone. Optional prompt settings (E3, exploratory;
     absent = the main-study request, byte for byte): question (replaces the instructions), criteria (false drops them),
     code_only (state without the task), order ("code_first" puts candidate_code first in the state). E6: delimit (true
     wraps candidate_code in per-code markers and adds the data-not-instructions note to the instructions)."""
@@ -78,31 +70,8 @@ def noul_p(r):
     if p is None: raise ValueError("no 'noul' probability in: " + json.dumps(entry)[:300])
     return float(p)
 
-class Jev:
-    def __init__(self, cfg):
-        self.cfg = cfg; self.name = cfg.get("name", "jev")
-        self.url = cfg.get("url", "https://openrouter.ai/api/alpha/decisions")
-    def raw(self, task_text, code):
-        key = os.environ.get(self.cfg.get("key_env", "OPENROUTER_API_KEY"))
-        if not key: raise RuntimeError("OPENROUTER_API_KEY not set")
-        body = decision_body(self.cfg.get("model", "typesafe/jev-1.13"), task_text, code)
-        t0 = time.perf_counter()
-        r = http_json(self.url, body, headers={"Authorization": f"Bearer {key}"}, timeout=120)
-        return r, time.perf_counter() - t0
-    @staticmethod
-    def parse(r):
-        """Docs say answers has one entry per question with a 'noul' probability and usage.cost (USD)."""
-        p = noul_p(r)
-        cost = (r.get("usage") or {}).get("cost")
-        if cost is None:   # without a cost the spend cap could never trigger; refuse rather than treat Jev as free
-            raise ValueError("Jev response has no usage.cost; fix the parser after checking the selftest output")
-        return p, float(cost)
-    def p_correct(self, task_text, code):
-        r, wall = self.raw(task_text, code); p, cost = self.parse(r)
-        return p, cost, wall, {"model_returned": r.get("model")}
-
-class Tev(Jev):
-    """Tev1 on a local Ollama (0.35 or later). Same request and answer as Jev, no key, no cost (local = $0)."""
+class Tev:
+    """Tev1 on a local Ollama (0.35 or later). No key, no cost (local = $0)."""
     def __init__(self, cfg):
         self.cfg = cfg; self.name = cfg.get("name", "tev")
         self.url = cfg["base_url"].rstrip("/") + "/v1/systemone"
@@ -160,27 +129,13 @@ class SelfConf:
         if r.get("lp_mean") is None: raise ValueError("draft has no lp_mean (generated before log-probabilities were recorded)")
         return math.exp(r["lp_mean"]), 0.0, 0.0, {}
 
-class YesNoLLM:
-    """Ollama or Anthropic model asked YES/NO; probability = share of YES among n votes (n fixed in PREREG)."""
-    def __init__(self, cfg, tier):
-        self.cfg = cfg; self.tier = tier; self.name = cfg.get("name", tier["name"]); self.n = cfg.get("votes", 5)
-    def p_correct(self, task_text, code):
-        gen = gen_ollama if self.tier["kind"] == "ollama" else gen_anthropic
-        run = dict({"temperature": 0.7, "num_predict": 4, "timeout_s": 180, "seed": 1}, **self.cfg.get("run", {}))
-        yes = 0; cost = 0.0; wall = 0.0; bad = 0
-        for i in range(self.n):
-            g = gen(self.tier, run, yesno_prompt(task_text, code), seed=run["seed"] + i, system=YESNO_SYS)
-            v = parse_vote(g["text"])
-            yes += v == "YES"; bad += v is None
-            cost += g.get("cost_usd") or 0.0; wall += g.get("wall_s") or 0.0
-        return yes / self.n, cost, wall, {"unparseable_votes": bad}
-
 def make(name, cfg_all):
     jc = dict(cfg_all["judges"][name], name=name)
-    if jc["kind"] in ("jev", "tev", "selfconf"):
-        j = {"jev": Jev, "tev": Tev, "selfconf": SelfConf}[jc["kind"]](jc); j.hash = config_hash(jc); return j
+    if jc["kind"] in ("tev", "selfconf"):
+        j = {"tev": Tev, "selfconf": SelfConf}[jc["kind"]](jc); j.hash = config_hash(jc); return j
     tier = next(t for t in cfg_all["tiers"] if t["name"] == jc["tier"])
-    j = (LogprobYesNo if jc["kind"] == "ollama_logprob" else YesNoLLM)(jc, tier)
+    if jc["kind"] != "ollama_logprob": raise ValueError(f"unknown judge kind {jc['kind']}")
+    j = LogprobYesNo(jc, tier)
     j.hash = config_hash(dict(jc, tier_model=tier["model"])); return j
 
 def selftest(cfg_path, name):
@@ -190,7 +145,7 @@ def selftest(cfg_path, name):
     t = next(x for x in suites.load("own") if x["id"] == "palindrome")
     good = t["reference"]; bad = "def is_palindrome(s):\n    return s == s[::-1]\n"
     for label, code in (("correct", good), ("wrong (ignores case/punctuation)", bad)):
-        if isinstance(j, Jev):
+        if isinstance(j, Tev):
             r, wall = j.raw(t["judge_task"], code); print(label, "RAW:", json.dumps(r)[:600]); print("  parsed:", j.parse(r), f"wall {wall:.2f}s")
         elif isinstance(j, LogprobYesNo):
             r, wall = j.raw(t["judge_task"], code); print(label, "RAW logprobs:", json.dumps(r.get("logprobs"))[:600])

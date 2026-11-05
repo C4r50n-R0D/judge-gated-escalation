@@ -1,6 +1,6 @@
 """Independent recomputation of the confirmatory results. Shares no code with controllers.py.
 Uses exact per-task expectations (no Monte Carlo) and its own bootstrap."""
-import json, random, itertools, hashlib, math, collections
+import json, random, itertools, hashlib, collections
 F='runs/confirmatory.labeled.jsonl'
 T=json.load(open('thresholds.json'))['taus']
 by=collections.defaultdict(lambda: collections.defaultdict(list)); split={}; n=0

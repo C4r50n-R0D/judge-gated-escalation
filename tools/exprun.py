@@ -16,7 +16,7 @@ Rules enforced by run:
   - Every step's start and end are UTC timestamps, so tools/hwjoin.py can attach the Mac's power and thermal log.
 Commands run with the repo root as the working directory and env.sh sourced (BENCH_SANDBOX).
 """
-import argparse, datetime, json, os, subprocess, sys
+import argparse, datetime, json, os, subprocess
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 EXT = os.path.join(ROOT, "ext")

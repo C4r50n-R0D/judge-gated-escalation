@@ -47,6 +47,38 @@ at `localhost`.
   compressed data rows. As a positive control, planted strings in a data row, a stored JSON file, a script and model-written
   code were all caught.
 
+## Clean-up after the clean-room run
+Code the study never used was then removed. The study repository keeps the original code.
+
+Removed:
+- Hosted-API paths: `gen_anthropic`, the `Jev` class, the spend cap and ledger in `bench.py` and `judge_label.py`.
+- The sampled-vote judge `YesNoLLM` and `parse_vote`, which no reported judge used.
+- The task-variant framework for experiments designed but not run: `variants/__main__.py`, `variants/transforms.py`,
+  `variants/quality.py`, the framework in `variants/__init__.py`, `ext/variants/`, `ext/E11/prompts.py`,
+  `tools/variant_selfcheck.sh`, and the `variant:` branches in `suites.py` and `evalplus_io.py`.
+- `style_bias.py`, an analysis that was not run, and `tools/stage_status.py` and `tools/t13_timing.py`, which only monitored
+  collection.
+- The matching tests and mock-server endpoints, and unused imports in scripts outside the analyses below.
+
+Kept on purpose: `controllers.py`, `judgestats.py`, `jsonl.py`, and every script that computed a reported number are
+byte-identical to the clean-room run. That leaves one unused variable in `judgestats.py`, unused imports in
+`ext/E3/analyze.py`, `ext/E14/e14.py` and `ext/E14b/e14b.py`, and one lint finding in the frozen `controllers.py`.
+`variants/codemods.py` stays because it produced the E4 to E6 data. `config.study.json` keeps its original keys as a record.
+
+Rerun on the final package: checksums, unit tests, the mock pipeline, the frozen report, the independent recomputation, all four
+`pressure` scripts, `rescore 500` and the identifier scan, all with the same results as above. Thresholds and the exploratory
+analyses were not rerun, because no file they use changed.
+
+`gen_ollama`, `tier_run`, `extract_code`, `http_json` and `load_config` have identical syntax trees before and after. Using
+the final code, the original sample again gave 21 of 21 byte-identical draws and 16 of 16 labels with the same verdict, with
+the same largest difference, 0.007069 (`repro/stored/repeat_check.json`).
+
+A second sample gave 6 of 7 identical (`repro/stored/repeat_check_second_sample.json`). The exception, Mbpp/632 rep 4,
+happens within seconds of a model load. It differed in 6 of 6 trials right after unloading the model, for the code before
+and after the clean-up alike, and matched the stored draw in every trial once the model had run longer, whichever prompt came
+before it. We did not establish the mechanism. Repeatability therefore holds for a warmed model, and a single warm-up draw
+does not always guarantee it.
+
 ## Not checked
 - The whole study has not been regenerated from this package. Repeatability rests on the sample above.
 - Generation has not been repeated on other hardware or other Ollama versions. Expect differences there.

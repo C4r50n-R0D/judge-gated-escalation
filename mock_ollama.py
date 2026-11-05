@@ -1,10 +1,10 @@
-"""Fake Ollama (incl. log-probabilities and Tev1's /v1/systemone) + Anthropic + Jev server for testing the pipeline
+"""Fake Ollama (incl. log-probabilities and Tev1's /v1/systemone) for testing the pipeline
 without hardware or spend.
 python mock_ollama.py PORT QUALITY(0..1)
 Generation: success probability = QUALITY (per task, shifted by difficulty); 10% of successes on difficulty>=3 tasks are
 a cheat that calls SystemExit(0) (the harness must score these as failures). Failures are a stub that fails both
 visible and hidden tests, so the mock never makes visible and hidden results disagree.
-Judges (YES/NO prompts and /alpha/decisions): noisy, better than chance, computed from hidden-test truth.
+Judges (YES/NO prompts and /v1/systemone): noisy, better than chance, computed from hidden-test truth.
 Mock results say NOTHING about real models; they only exercise the code paths."""
 import json, sys, random, math
 from http.server import BaseHTTPRequestHandler, HTTPServer
@@ -37,12 +37,12 @@ class H(BaseHTTPRequestHandler):
     def do_GET(self): self._send({"models": [{"name": "mock:7b", "size": 4_000_000_000}]})
     def do_POST(self):
         n = int(self.headers["Content-Length"]); body = json.loads(self.rfile.read(n))
-        if self.path.endswith("/alpha/decisions") or self.path.endswith("/v1/systemone"):
+        if self.path.endswith("/v1/systemone"):
             st = body["state"]; local = self.path.endswith("/v1/systemone")   # Tev1 on Ollama reports no cost
             return self._send({"id": "x", "model": body["model"] + ("" if local else "-20260901"), "provider": "mock",
                                "answers": {"is_correct": {"type": "noul", "noul": judge_p(st["task"], st["candidate_code"])}},
                                "usage": {"input_tokens": 300, "output_tokens": 0} if local else {"input_tokens": 300, "output_tokens": 0, "cost": 0.00004}})
-        prompt = body["messages"][0]["content"] if self.path.endswith("/v1/messages") else body["prompt"]
+        prompt = body["prompt"]
         system = body.get("system", "")
         lp = None
         if "strict code reviewer" in system:
@@ -57,8 +57,6 @@ class H(BaseHTTPRequestHandler):
             if body.get("logprobs"):   # correct code a little more confident than wrong code
                 ok = "return None" not in txt and "SystemExit" not in txt
                 lp = [{"token": "x", "logprob": -abs(rnd.gauss(0.15 if ok else 0.4, 0.1))} for _ in range(5)]
-        if self.path.endswith("/v1/messages"):
-            return self._send({"model": body["model"], "content": [{"type": "text", "text": txt}], "usage": {"input_tokens": 200, "output_tokens": 120}})
         out = {"response": txt, "eval_count": 100, "eval_duration": int(100 / 20 * 1e9), "prompt_eval_count": 60,
                "prompt_eval_duration": int(60 / 500 * 1e9), "load_duration": 0}
         if lp is not None: out["logprobs"] = lp

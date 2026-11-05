@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Unit tests: run with `python tests/test_units.py` from the repo root (stdlib only)."""
-import json, os, random, sys, tempfile, itertools
+import json, os, random, sys, tempfile
 os.environ.setdefault("BENCH_ALLOW_UNSANDBOXED", "1")   # unit tests run trivial snippets on the host
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import suites, controllers as C, evalplus_io
@@ -32,8 +32,6 @@ check("os._exit(0) cheat cannot pass", not run_tests("import os\ndef f():\n    o
 check("correct code passes", run_tests("def f():\n    return 1\n", "assert f() == 1")[0])
 check("printing a fixed marker then exit(0) cannot pass", not run_tests("import sys\nprint('__TESTS_PASSED__'); sys.exit(0)\ndef f(): return 2", "assert f() == 1")[0])
 check("timeout kills child processes", run_tests("import subprocess, time\nsubprocess.Popen(['sleep', '30'])\ntime.sleep(30)", "pass", timeout=2) == (False, "timeout"))
-from judge import parse_vote
-check("vote parser tolerates markdown and case", [parse_vote(x) for x in ["**Yes.**", "no", " NO, because", "Maybe"]] == ["YES", "NO", "NO", None])
 check("extract_code picks fenced block", extract_code("hi\n```python\nx=1\n```\nbye") == "x=1")
 
 # controllers: closed-form checks on synthetic draws
@@ -122,15 +120,13 @@ with tempfile.TemporaryDirectory() as d:
     except SystemExit: check("selfcheck verify rejects a broken scoring", True)
 # local judges: P(YES) from log-probabilities, Tev1 answers, the selfconf baseline
 import math
-from judge import yes_prob, Tev, Jev, SelfConf
+from judge import yes_prob, Tev, SelfConf
 lp = lambda pairs: {"logprobs": [{"token": pairs[0][0], "logprob": math.log(pairs[0][1]),
                                   "top_logprobs": [{"token": t, "logprob": math.log(v)} for t, v in pairs]}]}
 p, mass = yes_prob(lp([("YES", .6), ("Yes", .1), ("**", .1), ("NO", .2)]))
 check(f"P(YES) sums every spelling and renormalises over YES+NO (got {p:.3f}, mass {mass:.2f})", abs(p - .7 / .9) < 1e-9 and abs(mass - .9) < 1e-9)
 check("P(YES) is None when neither YES nor NO is among the top tokens", yes_prob(lp([("**", .9), ("The", .1)]))[0] is None)
 check("Tev1 answer parses with $0 cost", Tev.parse({"answers": {"is_correct": {"type": "noul", "noul": 0.92}}, "usage": {"input_tokens": 1}}) == (0.92, 0.0))
-try: Jev.parse({"answers": {"is_correct": {"noul": 0.9}}, "usage": {}}); check("hosted Jev still refuses a response without usage.cost", False)
-except ValueError: check("hosted Jev still refuses a response without usage.cost", True)
 check("selfconf = exp(mean log-probability)", abs(SelfConf({}).p_from_row({"lp_mean": -0.5})[0] - math.exp(-0.5)) < 1e-12)
 
 # cost metric: in seconds the cheapest tau accepts more drafts; in USD every local tau costs the same
@@ -185,77 +181,6 @@ check(f"cool_down probes until speed recovers (waited {w}s, last {tps})", w == 3
 w, tps = bench.cool_down(lambda t, run, p, seed=None: {"decode_tps": 1.0}, tier, {}, cool, sleep=lambda s: None)
 check(f"cool_down gives up after max_wait_s (waited {w}s)", w == 40)
 
-# variant framework (T16): deterministic, resumable, verified-by-construction for identity; blind by default
-import variants, shutil
-@variants.transform("_test_upper_first_line")
-def _upper(task, rng, params):
-    lines = task["raw_prompt"].split("\n"); i = next(k for k, l in enumerate(lines) if l.strip() and not l.startswith(("from", "import")))
-    lines[i] = lines[i] + "  # " + params.get("tag", "x") + str(rng.randint(0, 9))
-    return {"raw_prompt": "\n".join(lines)}
-with tempfile.TemporaryDirectory() as d:
-    variants.VARIANT_DIR = d
-    try: variants.build("v_test", "humaneval+", "identity", log=lambda *a: None, split="test"); check("variant build refuses test split without --allow-test", False)
-    except SystemExit: check("variant build refuses test split without --allow-test", True)
-    try: variants.build("v_own", "own", "identity", split="all", allow_test=True, log=lambda *a: None); check("variant build refuses non-EvalPlus base", False)
-    except SystemExit: check("variant build refuses non-EvalPlus base", True)
-    m = variants.build("v_id", "humaneval+", "identity", split="all", allow_test=True, log=lambda *a: None)
-    V = {t["id"]: t for t in suites.load("variant:v_id")}; B = {t["id"]: t for t in suites.load("humaneval+")}
-    check("identity variant reproduces prompt, judge view, prefix, reference and split",
-          m["n_tasks"] == 3 and all(V[i][k] == B[i][k] for i in B for k in ("prompt", "judge_task", "context_prefix", "reference", "split", "entry")))
-    check("variant rows carry their suite and base", all(v["suite"] == "variant:v_id" and v["base_suite"] == "humaneval+" for v in V.values()))
-    m1 = variants.build("v_up", "humaneval+", "_test_upper_first_line", seed=3, params={"tag": "q"}, split="all", allow_test=True, log=lambda *a: None)
-    shutil.copytree(os.path.join(d, "v_up"), os.path.join(d, "v_up_copy")); shutil.rmtree(os.path.join(d, "v_up"))
-    first = sorted(B)[:1]
-    variants.build("v_up", "humaneval+", "_test_upper_first_line", seed=3, params={"tag": "q"}, split="all", ids=first, allow_test=True, log=lambda *a: None)
-    m2 = variants.build("v_up", "humaneval+", "_test_upper_first_line", seed=3, params={"tag": "q"}, split="all", allow_test=True, log=lambda *a: None)
-    check("variant build is deterministic and resumable (partial then full = full at once)", m1["tasks_sha256"] == m2["tasks_sha256"] and m2["n_tasks"] == 3)
-    U = {t["id"]: t for t in suites.load("variant:v_up")}
-    check("text transform changes prompt and judge view, keeps reference and tests", all(U[i]["prompt"] != B[i]["prompt"] and "# q" in U[i]["judge_task"] and U[i]["reference"] == B[i]["reference"] for i in B))
-    try: variants.build("v_up", "humaneval+", "_test_upper_first_line", seed=4, split="all", allow_test=True, log=lambda *a: None); check("variant refuses a changed definition under the same name", False)
-    except SystemExit: check("variant refuses a changed definition under the same name", True)
-    rows = os.path.join(d, "r.jsonl"); samp = os.path.join(d, "s.jsonl")
-    open(rows, "w").write(json.dumps(dict(tier="t", task=sorted(B)[0], rep=0, suite="variant:v_up", split=U[sorted(B)[0]]["split"], code="def f(): pass\n")) + "\n")
-    evalplus_io.export(rows, "variant:v_up", samp)
-    S2 = [json.loads(l) for l in open(samp)]
-    check("variant export: one sample plus placeholders for every other base problem", len(S2) == 3 and sum(x["solution"] == evalplus_io.PLACEHOLDER for x in S2) == 2)
-
-# T17 transforms on the HumanEval fixture and a synthetic MBPP task
-import random as _r
-from variants import transforms as VT
-_he_raw = ('from typing import List\n\n\ndef has_close_elements(numbers: List[float], threshold: float) -> bool:\n'
-           '    """ Check if in given list of numbers, are any two numbers closer to each other than\n    given threshold.\n'
-           '    >>> has_close_elements([1.0, 2.0, 3.0], 0.5)\n    False\n    >>> has_close_elements([1.0, 2.8, 3.0], 0.3)\n    True\n    """\n')
-he0 = {"id": "HumanEval/0", "entry": "has_close_elements", "split": "cal", "raw_prompt": _he_raw,
-       "reference": _he_raw + "    s = sorted(numbers)\n    return any(b - a < threshold for a, b in zip(s, s[1:]))\n"}
-mb0 = {"id": "Mbpp/9999", "entry": "add_nums", "split": "cal", "raw_prompt": '"""\nWrite a function to add two numbers. The result must be an integer.\nassert add_nums(1, 2) == 3\n"""\n',
-       "reference": '"""\nWrite a function to add two numbers.\nassert add_nums(1, 2) == 3\n"""\n\ndef add_nums(first_num, b):\n    return first_num + b\n'}
-def app(t, name, params=None, seed=1):
-    ch = variants.TRANSFORMS[name](t, _r.Random(seed), params or {})
-    return None if ch is None else variants.rebuild_task(t, ch)
-v = app(he0, "rename_params")
-fn = VT.entry_def(v["reference"], "has_close_elements"); names = [x.arg for x in fn.args.args]
-check(f"rename_params: new parameter names in signature and reference body ({names})",
-      "numbers" not in names and all(n in v["raw_prompt"].split("def has_close_elements(")[1].split(")")[0] for n in names)
-      and all(n in v["reference"] for n in names) and not VT.check_text(he0, v))
-check("rename_params: ordinary prose words are kept", "list of numbers" in v["raw_prompt"])
-vm = app(mb0, "rename_params")
-check("rename_params on MBPP: judge signature renamed, underscore name renamed in prose-free prompt", "first_num" not in vm["judge_task"] and "add_nums(" in vm["judge_task"] and not VT.check_text(mb0, vm))
-v = app(he0, "distractor")
-check("distractor: one known paragraph at the end of the description, examples intact", any(p_ in v["raw_prompt"] for p_ in VT.DISTRACTORS) and v["raw_prompt"].count(">>>") == he0["raw_prompt"].count(">>>") and not VT.check_text(he0, v))
-for w in (100, 400):
-    v = app(he0, "padding", {"words": w}); vm = app(mb0, "padding", {"words": w})
-    check(f"padding {w}: at least {w} words added, prompt still valid", v["variant_notes"]["words"] >= w and not VT.check_text(he0, v) and not VT.check_text(mb0, vm) and "assert add_nums" in vm["raw_prompt"])
-v = app(he0, "drop_example")
-check("drop_example: one of two examples removed", v["raw_prompt"].count(">>>") == he0["raw_prompt"].count(">>>") - 1 and not VT.check_text(he0, v))
-check("drop_example: not applicable to MBPP", app(mb0, "drop_example") is None)
-vm = app(mb0, "drop_sentence")
-check("drop_sentence: second sentence removed, assert kept", "must be an integer" not in vm["raw_prompt"] and "assert add_nums" in vm["raw_prompt"])
-VT.ollama_text = lambda *a, **k: "Return True when any two values in the list are nearer than the threshold."
-v = app(he0, "paraphrase", {"base_url": "x", "model": "y"})
-check("paraphrase: description replaced, examples and signature kept", "nearer than the threshold" in v["raw_prompt"] and v["raw_prompt"].count(">>>") == 2 and not VT.check_text(he0, v))
-bad = dict(he0, raw_prompt=he0["raw_prompt"].replace("def has_close_elements(", "def other_name("))
-check("check_text catches a lost entry point", bool(VT.check_text(he0, variants.rebuild_task(bad, {}))))
-
 # T18 candidate-code transforms: preserve and inject keep behaviour, mutators change it, payloads stay benign
 from variants import codemods as CM
 SRC = ('def helper(x):\n    """Square it."""\n    return x * x  # square\n\n\n'
@@ -280,12 +205,6 @@ mrows, sk = CM.apply_rows(rows_, "inject_direct")
 check("apply_rows renames the tier, keeps the original verdict for comparison, drops old scores",
       mrows[0]["tier"] == "reference+inject_direct" and mrows[0]["orig_hidden_passed"] is True and "hidden_passed" not in mrows[0] and sk == 0)
 
-check("rename_tokens renames tuple-assignment targets but not call keywords",
-      VT.rename_tokens("def f(a, b):\n    a, b = b, a\n    return g(b=a)\n", {"a": "x", "b": "y"}) == "def f(x, y):\n    x, y = y, x\n    return g(b=x)\n")
-
-mbp = dict(mb0, context_prefix="")
-vp = variants.rebuild_task(mbp, VT.padding(mbp, random.Random(5), {"words": 1500}))
-check("padding never leaks prose into the scoring prefix (MBPP)", vp["context_prefix"] == "" and "from " in vp["raw_prompt"] + "from ")
 
 # network outages: retry the same draw instead of writing an error row; other errors still propagate
 import urllib.error as _ue
@@ -313,11 +232,6 @@ check(f"Platt scaling improves Brier for a miscalibrated score (a={ab[0]:.2f})",
 X = [[rnd_.gauss(0, 1), rnd_.gauss(0, 1)] for _ in range(300)]; Y = [int(x[0] - 0.2 * x[1] + rnd_.gauss(0, .3) > 0) for x in X]
 w = JS.fit_logreg(X, Y)
 check(f"stacked logistic regression recovers the informative input (w={[round(v, 2) for v in w]})", w[1] > 1 and abs(w[2]) < w[1])
-
-import variants.quality as VQ
-v = app(he0, "translate", {"base_url": "x", "model": "y", "lang": "French"})
-check("translate: description replaced, examples kept, language recorded", v["variant_notes"]["lang"] == "French" and v["raw_prompt"].count(">>>") == 2 and not VT.check_text(he0, v))
-check("cosine similarity", abs(VQ.cosine([1, 0], [1, 0]) - 1) < 1e-12 and abs(VQ.cosine([1, 0], [0, 1])) < 1e-12)
 
 NEST = "def outer(xs):\n    def inner(s):\n        return len(s)\n    return [inner(s) for s in xs]\n"
 check("rename_locals never renames a name that is a parameter elsewhere (HumanEval/6 bug)",

@@ -5,3 +5,4 @@ repro_out/
 __pycache__/
 *.pyc
 .DS_Store
+tests/last_mock_report.md

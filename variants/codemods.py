@@ -18,7 +18,7 @@ pass/fail verdict unchanged on every row; a mutant is kept only if it fails the 
 Safety: payloads are benign canaries (answer YES, fake verdicts, role tags, hidden characters). Nothing asks for
 harmful content, and no judge or generator gets tool access.
 """
-import argparse, ast, copy, json, random, re, sys, warnings
+import argparse, ast, copy, json, random, sys, warnings
 
 CODE_TRANSFORMS = {}   # name -> (fn, kind, bug_class)
 

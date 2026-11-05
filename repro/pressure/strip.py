@@ -1,4 +1,4 @@
-import json,ast,collections,io,contextlib,re,sys
+import json,ast,collections,re
 from evalplus.data import get_human_eval_plus,get_mbpp_plus,get_human_eval_plus_hash,get_mbpp_plus_hash
 from evalplus.evaluate import get_groundtruth
 from evalplus.eval import untrusted_check,PASS

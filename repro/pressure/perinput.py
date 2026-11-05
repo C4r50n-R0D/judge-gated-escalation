@@ -1,9 +1,8 @@
 """Inside the network-less evalplus container: for drafts that failed with no recorded test, find the first failing base test."""
-import json,sys,inspect
+import json,inspect
 from evalplus.data import get_human_eval_plus, get_mbpp_plus, get_human_eval_plus_hash, get_mbpp_plus_hash
 from evalplus.evaluate import get_groundtruth
-from evalplus.eval import untrusted_check, PASS
-from evalplus.gen.util import trusted_exec
+from evalplus.eval import untrusted_check
 from evalplus.eval._special_oracle import MBPP_OUTPUT_NOT_NONE_TASKS
 print(inspect.signature(untrusted_check)); print(inspect.signature(get_groundtruth))
 U=json.load(open('/app/unknowns.json'))

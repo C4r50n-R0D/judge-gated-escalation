@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Fail if the package holds network addresses, personal paths or credentials. Model-written code inside data rows is
 reported separately, because benchmark tasks about IP addresses contain example addresses."""
-import json, lzma, os, re, subprocess, sys
+import json, lzma, os, re, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); os.chdir(ROOT)
 BAD = {"tailnet ip": r"\b100\.(6[4-9]|[7-9]\d|1[01]\d|12[0-7])\.\d{1,3}\.\d{1,3}\b", "private ip": r"\b(192\.168|10\.\d{1,3}|172\.(1[6-9]|2\d|3[01]))\.\d{1,3}\.\d{1,3}\b",
        "tailnet": r"(?i)tailscale|tailnet|\.ts\.net", "user path": r"carsonrodriguez|/home/carson|/Users/[a-z]", "email": r"[\w.+-]+@(gmail|icloud|outlook|proton)\.\w+",

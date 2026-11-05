@@ -10,13 +10,11 @@ are skipped, so an interrupted overnight batch just restarts. Each tier draws `d
 
 --pilot N  draws only N tasks, chosen at random (fixed seed) from the CALIBRATION split, so the pilot never
            touches test-split tasks.
-Spend guard: Anthropic spend recorded in out.jsonl plus this run is capped at config "max_usd"; the run stops
-when the cap is reached.
 Scoring: own-suite rows are scored here; EvalPlus rows are scored later by evalplus_io.py (official evaluator).
 """
 import json, os, re, subprocess, sys, tempfile, time, urllib.request, urllib.error, platform, datetime, random, argparse, secrets, shlex, signal
 import suites
-from jsonl import read_jsonl, open_append, resolve
+from jsonl import read_jsonl, open_append
 
 SYSTEM = "You are a careful Python programmer. Reply with a single ```python code block containing only the requested code and its imports. No explanation, no tests, no example usage."
 
@@ -81,24 +79,7 @@ def gen_ollama(t, run, prompt, seed=None, system=None):
                 # the generator's own confidence over the whole reply (the selfconf baseline gate)
                 lp_mean=(sum(lps) / len(lps)) if lps else None, lp_min=min(lps) if lps else None)
 
-def gen_anthropic(t, run, prompt, seed=None, system=None):
-    key = os.environ.get(t.get("api_key_env", "ANTHROPIC_API_KEY"))
-    if not key: raise RuntimeError("API key env var not set")
-    pi, po = t.get("usd_per_mtok_in"), t.get("usd_per_mtok_out")
-    if pi is None or po is None: raise RuntimeError(f"tier {t['name']}: set usd_per_mtok_in/out in config (the spend guard needs them)")
-    t0 = time.perf_counter()
-    r = http_json((t.get("base_url") or "https://api.anthropic.com") + "/v1/messages", {
-        "model": t["model"], "max_tokens": run["num_predict"], "temperature": run["temperature"],
-        "system": system or SYSTEM, "messages": [{"role": "user", "content": prompt}]},
-        headers={"x-api-key": key, "anthropic-version": "2023-06-01"}, timeout=run["timeout_s"])
-    wall = time.perf_counter() - t0
-    u = r.get("usage", {})
-    ti, to = u.get("input_tokens") or 0, u.get("output_tokens") or 0
-    text = "".join(b.get("text", "") for b in r.get("content", []) if b.get("type") == "text")
-    return dict(text=text, wall_s=wall, tokens_out=to, tokens_in=ti, decode_tps=None, prefill_tps=None,
-                load_s=0.0, cost_usd=(ti * pi + to * po) / 1e6, model_returned=r.get("model"))
-
-GEN = {"ollama": gen_ollama, "anthropic": gen_anthropic}
+GEN = {"ollama": gen_ollama}
 
 def tier_run(cfg, t):
     """Per-tier generation settings: tier values override the global defaults."""
@@ -129,22 +110,9 @@ def read_done(path):
             else: done.add(k)
     return done, errors
 
-def ledger_path(cfg): return resolve(cfg, "ledger", "runs/spend_ledger.jsonl")
 
 def load_config(path):
     cfg = json.load(open(path)); cfg["_config_dir"] = os.path.dirname(os.path.abspath(path)); return cfg
-
-def ledger_spent(cfg, prefix):
-    """Total USD recorded in the global spend ledger for sources starting with prefix ('gen:' or 'judge:NAME').
-    The ledger is shared by every output file, so starting a new output file does not reset any cap."""
-    p = ledger_path(cfg)
-    return sum(e["usd"] for e in read_jsonl(p) if e["source"].startswith(prefix)) if os.path.exists(p) else 0.0
-
-def ledger_add(cfg, source, usd, note=""):
-    if usd:
-        os.makedirs(os.path.dirname(ledger_path(cfg)) or ".", exist_ok=True)
-        with open_append(ledger_path(cfg)) as f:
-            f.write(json.dumps({"ts": time.time(), "source": source, "usd": usd, "note": note}) + "\n")
 
 def select_tasks(cfg, pilot=None, suite_override=None, max_tasks=None, split=None):
     tasks = suites.load_many(suite_override or cfg["suites"])
@@ -226,10 +194,10 @@ def cmd_run(cfg_path, out_path, pilot=None, suite_override=None, max_tasks=None,
     cfg = load_config(cfg_path)
     check_same_conditions(cfg, out_path)
     tasks = select_tasks(cfg, pilot, suite_override, max_tasks, split)
-    done, errors = read_done(out_path); cap = cfg.get("max_usd", 40.0); spent = ledger_spent(cfg, "gen:")
+    done, errors = read_done(out_path)
     meta = dict(ts=now_iso(), host=platform.node(),
                 py=sys.version.split()[0], cfg=cfg, gen_signature=gen_signature(cfg), pilot=pilot, split=split, n_tasks=len(tasks),
-                already_done=len(done), spent_before=spent)
+                already_done=len(done))
     gave_up = 0
     gens = [t for t in cfg["tiers"] if t.get("role", "generator") == "generator"]
     cool = cfg.get("cooldown")   # {"min_ratio", "window", "pause_s", "max_wait_s"}; pauses are logged as _meta records
@@ -263,14 +231,11 @@ def cmd_run(cfg_path, out_path, pilot=None, suite_override=None, max_tasks=None,
                 for task, rep in todo:
                     key = (t["name"], task["id"], rep)
                     if errors.get(key, 0) >= MAX_ATTEMPTS: gave_up += 1; continue
-                    if t["kind"] == "anthropic" and spent >= cap:
-                        print(f"SPEND CAP ${cap} reached (spent ${spent:.4f}); stopping. Raise max_usd deliberately if intended."); return
                     row = dict(tier=t["name"], model=t["model"], suite=task["suite"], task=task["id"], split=task["split"], rep=rep,
                                temperature=run["temperature"], params_b=t.get("params_b"), block=b, ts=now_iso())
                     try:
                         g = with_network_retry(lambda: gen(t, run, task["prompt"], seed=(run.get("seed") or 0) + rep), out, t["name"])
-                        code = extract_code(g.pop("text")); spent += g.get("cost_usd") or 0.0
-                        ledger_add(cfg, f"gen:{t['name']}", g.get("cost_usd") or 0.0, task["id"])
+                        code = extract_code(g.pop("text"))
                         # seconds cost: wall time minus any model load Ollama reports (a swap that slipped past the warm-up)
                         g["wall_s_net"] = max(0.0, (g.get("wall_s") or 0.0) - (g.get("load_s") or 0.0))
                         row.update(g, code=code, error=None)
@@ -285,7 +250,7 @@ def cmd_run(cfg_path, out_path, pilot=None, suite_override=None, max_tasks=None,
                         maybe_cool(t, run, gen, recent, out, "mid batch")
                     shown = row.get("hidden_passed") if task["split"] == "cal" else "blind"   # never display test-split outcomes
                     print(f"  b{b} {t['name']:9s} {task['id']:16s} rep{rep} wall={row.get('wall_s') or 0:.1f}s hidden={shown} err={row.get('error')}", flush=True)
-    print(f"done; generation spend in ledger {ledger_path(cfg)}: ${spent:.4f}; draws excluded after {MAX_ATTEMPTS} failed attempts: {gave_up}")
+    print(f"done; draws excluded after {MAX_ATTEMPTS} failed attempts: {gave_up}")
 
 if __name__ == "__main__":
     if len(sys.argv) >= 2 and sys.argv[1] == "validate":

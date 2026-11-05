@@ -8,9 +8,9 @@ python3 mock_ollama.py 8101 0.55 & python3 mock_ollama.py 8102 0.85 & sleep 1
 python3 - "$W/config.json" <<'PY'
 import json, sys
 c = json.load(open("config.example.json"))
-c["suites"] = ["own"]; c["max_usd"] = 5
+c["suites"] = ["own"]
 c.pop("cooldown", None)   # the mock decodes at a fixed 20 tok/s; real reference speeds would trigger pauses
-c["ledger"] = sys.argv[1].replace("config.json", "ledger.jsonl"); c["judge_cache_dir"] = sys.argv[1].replace("config.json", "jcache")
+c["judge_cache_dir"] = sys.argv[1].replace("config.json", "jcache")
 for t in c["tiers"]:
     t["base_url"] = "http://127.0.0.1:8102" if t["name"] == "strong14b" else "http://127.0.0.1:8101"   # strong mock is better
     t.pop("subset_fraction", None)
@@ -42,7 +42,6 @@ python3 judge_label.py "$W/labeled.jsonl" "$W/config.json" llama "$W/labeled_all
 python3 judge_label.py "$W/raw.jsonl" "$W/config.json" llama "$W/again.jsonl" --tiers local3b | tee "$W/again.log"
 grep -q "(0 new" "$W/again.log" || { echo "judge cache reuse failed"; exit 1; }
 python3 suites.py manifest own "$W/manifest.json"
-python3 style_bias.py "$W/labeled_all.jsonl" --judge llama --split cal --boots 200 || echo "(style_bias: too few common tasks on the tiny mock suite is acceptable)"
 python3 tools/derived_judges.py "$W/labeled.jsonl" "$W/derived.jsonl" --base tev,llama,selfconf --tiers local3b --fits "$W/fits.json" \
   || { echo "(derived judges: the mock suite has too few calibration rows; acceptable)"; cp "$W/labeled.jsonl" "$W/derived.jsonl"; }
 python3 controllers.py explore "$W/labeled.jsonl" --mc 50 > "$W/explore.txt"
@@ -65,20 +64,6 @@ grep -q '"cost_metric": "tok"' "$W/thresholds.json" || { echo "cost metric (toke
 grep -q '"secondary_cost_metric": "sec"' "$W/thresholds.json" || { echo "secondary cost metric not recorded"; exit 1; }
 grep -q "^## S1 " "$W/report.md" && grep -q "^## S2 " "$W/report.md" || { echo "secondary comparisons S1/S2 missing from report"; exit 1; }
 grep -q 'token-compute/task' "$W/report.md" || { echo "token-compute column missing from report"; exit 1; }
-# variant suites (T16): build an identity variant of the HumanEval+ fixture, generate on it, export it for EvalPlus
-export HUMANEVAL_PLUS_PATH="$PWD/tests/fixtures/HumanEvalPlus-fixture.jsonl" BENCH_DATA_DIR="$W/data"
-python3 -m variants build v_mock --base humaneval+ --transform identity --split all --allow-test
-python3 -c "import json,sys; c=json.load(open(sys.argv[1])); [t.update(draws=1) for t in c['tiers']]; json.dump(c,open(sys.argv[2],'w'))" "$W/config.json" "$W/config_v.json"
-python3 bench.py run "$W/config_v.json" "$W/v.jsonl" --suites variant:v_mock > "$W/v.log"
-python3 evalplus_io.py export "$W/v.jsonl" variant:v_mock "$W/v_samples.jsonl" | tee "$W/v_export.log"
-python3 - "$W/v.jsonl" "$W/config_v.json" <<'PY2' || { echo "variant generation check failed"; exit 1; }
-import json, sys
-rows = [r for r in map(json.loads, open(sys.argv[1])) if "_meta" not in r]
-n_gen = sum(1 for t in json.load(open(sys.argv[2]))["tiers"] if t.get("role", "generator") == "generator")
-assert len(rows) == 3 * n_gen and all(r["suite"] == "variant:v_mock" and not r.get("error") for r in rows), (len(rows), rows[:1])
-PY2
-grep -q "exported $((3 * 4)) samples" "$W/v_export.log" || { echo "variant export count wrong"; exit 1; }
-unset HUMANEVAL_PLUS_PATH BENCH_DATA_DIR
 # experiment runner (T22): refuses uncommitted specs, runs steps in order, resumes, counts comparisons
 X="$W/xrepo"; mkdir -p "$X/tools" && cp tools/exprun.py "$X/tools/" && (cd "$X" && git init -q && git -c user.email=t@t -c user.name=t commit -q --allow-empty -m init)
 python3 "$X/tools/exprun.py" new EX --title "runner test" > /dev/null

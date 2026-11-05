@@ -33,6 +33,7 @@ for name, n in parse(a.draws).items():
     t = tiers[name]
     if have.get(t["model"]) != digests[t["model"]]: raise SystemExit(f"{t['model']}: digest {have.get(t['model'])} is not the study's {digests[t['model']]}")
     run = bench.tier_run(cfg, t)
+    bench.gen_ollama(t, dict(run, num_predict=64, temperature=0.0), bench.PROBE_PROMPT, seed=1)   # discarded, as in bench.py
     for r in rnd.sample([x for x in rows if x["tier"] == name], n):
         g = bench.gen_ollama(t, run, T[r["task"]]["prompt"], seed=(run.get("seed") or 0) + r["rep"])
         code = bench.extract_code(g["text"]); same = code == r["code"]

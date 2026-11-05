@@ -1,0 +1,135 @@
+{
+ "draws": [
+  {
+   "tier": "local3b",
+   "task": "HumanEval/54",
+   "rep": 6,
+   "identical": true,
+   "tokens_stored": 150,
+   "tokens_now": 150
+  },
+  {
+   "tier": "local3b",
+   "task": "Mbpp/165",
+   "rep": 5,
+   "identical": true,
+   "tokens_stored": 74,
+   "tokens_now": 74
+  },
+  {
+   "tier": "local3b",
+   "task": "Mbpp/632",
+   "rep": 4,
+   "identical": false,
+   "tokens_stored": 71,
+   "tokens_now": 86
+  },
+  {
+   "tier": "local3b",
+   "task": "Mbpp/644",
+   "rep": 0,
+   "identical": true,
+   "tokens_stored": 107,
+   "tokens_now": 107
+  },
+  {
+   "tier": "local1p5b",
+   "task": "Mbpp/101",
+   "rep": 7,
+   "identical": true,
+   "tokens_stored": 27,
+   "tokens_now": 27
+  },
+  {
+   "tier": "local1p5b",
+   "task": "Mbpp/577",
+   "rep": 6,
+   "identical": true,
+   "tokens_stored": 29,
+   "tokens_now": 29
+  },
+  {
+   "tier": "strong14b",
+   "task": "Mbpp/555",
+   "rep": 1,
+   "identical": true,
+   "tokens_stored": 122,
+   "tokens_now": 122
+  }
+ ],
+ "labels": [
+  {
+   "judge": "tev",
+   "task": "Mbpp/297",
+   "rep": 3,
+   "stored": 0.4385235925213706,
+   "now": 0.44283555370805355,
+   "abs_diff": 0.004311961186682978,
+   "same_verdict": true
+  },
+  {
+   "judge": "tev",
+   "task": "Mbpp/6",
+   "rep": 0,
+   "stored": 0.7973303625369526,
+   "now": 0.7927257419722056,
+   "abs_diff": 0.004604620564746975,
+   "same_verdict": true
+  },
+  {
+   "judge": "tev",
+   "task": "Mbpp/760",
+   "rep": 0,
+   "stored": 0.97657377306029,
+   "now": 0.9773818498157653,
+   "abs_diff": 0.0008080767554752288,
+   "same_verdict": true
+  },
+  {
+   "judge": "tev",
+   "task": "HumanEval/97",
+   "rep": 6,
+   "stored": 0.9709625289182514,
+   "now": 0.9696732671424286,
+   "abs_diff": 0.001289261775822781,
+   "same_verdict": true
+  },
+  {
+   "judge": "llama",
+   "task": "Mbpp/297",
+   "rep": 1,
+   "stored": 0.17700095992761067,
+   "now": 0.17700095992761067,
+   "abs_diff": 0.0,
+   "same_verdict": true
+  },
+  {
+   "judge": "llama",
+   "task": "Mbpp/392",
+   "rep": 2,
+   "stored": 0.3050518991083388,
+   "now": 0.3050518991083388,
+   "abs_diff": 0.0,
+   "same_verdict": true
+  },
+  {
+   "judge": "llama",
+   "task": "Mbpp/586",
+   "rep": 4,
+   "stored": 0.21575357140787266,
+   "now": 0.21575357140787266,
+   "abs_diff": 0.0,
+   "same_verdict": true
+  },
+  {
+   "judge": "llama",
+   "task": "HumanEval/34",
+   "rep": 5,
+   "stored": 0.4347095616085499,
+   "now": 0.4347095616085499,
+   "abs_diff": 0.0,
+   "same_verdict": true
+  }
+ ],
+ "ollama": "0.40.8"
+}

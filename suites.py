@@ -81,9 +81,6 @@ def load(suite):
     """Return a list of task dicts with a common shape:
     id, suite, split, prompt (what the model sees), judge_task (what the judge sees), entry,
     scorer ('local' | 'evalplus'), and for local scoring: tests, hidden, reference."""
-    if suite.startswith("variant:"):   # a verified transform of a base suite (variants/), same ids, splits and tests
-        import variants
-        return variants.load(suite.split(":", 1)[1])
     if suite == "own":
         from tasks import TASKS
         return [dict(id=t["id"], suite="own", split=split_of(t["id"]), prompt=t["prompt"], judge_task=t["prompt"], raw_prompt=t["prompt"],

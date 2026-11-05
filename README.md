@@ -39,6 +39,8 @@ Times are from a 4-thread Intel i3-7100U; most machines will be faster.
 rerun by it, because they execute model-written code and need extra packages: `repro/pressure/strip.py` and `mods.py`. Their
 outputs are in `repro/pressure/stored/`, and `pressure` reads them. To rerun them, use containers with `--network none`.
 
+On macOS with Python from python.org, `fetch` needs that build's "Install Certificates" command to have been run once.
+
 Before `rescore`, build the scorer once. Its first run needs network to cache the dataset.
 
 ```sh
@@ -46,7 +48,8 @@ docker build -f Dockerfile.evalplus -t evalplus:0.3.1 .
 docker run --rm -v evalplus-cache:/root/.cache/evalplus evalplus:0.3.1 python -c "from evalplus.data import get_human_eval_plus as h, get_mbpp_plus as m; h(); m()"
 ```
 
-Before `repeat`, pull the models named in `ENVIRONMENT.md` and check their digests with `ollama list`. The script refuses
+Before `repeat`, pull the models named in `ENVIRONMENT.md` and check their digests with `ollama list`. A draw made within
+seconds of a model load can differ from the stored one and then match on a later run; see `VERIFICATION.md`. The script refuses
 a model whose digest differs, and refuses any Ollama that is not on this machine unless you pass `--allow-remote`.
 
 ## Regenerating the whole study
@@ -95,7 +98,8 @@ history records the study's network settings; it is available to the editor on r
 
 Commit dates are self-reported. There is no third-party registry deposit, as the paper states.
 
-## Unused code
+## What is not here
 
-`bench.py` and `judge.py` still contain hosted-API paths from the first draft of the pre-registration. The study did not
-use them, and they do nothing without a key in an environment variable.
+The hosted-API code from the first draft of the pre-registration was never used by the study and has been removed, along
+with code for the follow-up experiments that were designed but not run. `ext/E1`, `E7`, `E8`, `E10` and `E11` keep their
+specifications only. `VERIFICATION.md` lists exactly what was removed and how the result was checked.

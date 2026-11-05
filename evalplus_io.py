@@ -35,9 +35,7 @@ def _selected(r, tasks, split):
             and (split == "all" or r.get("split") == split))
 
 def base_ids(suite, tasks):
-    """Every problem id of the EvalPlus dataset behind `suite` (a variant suite is scored on its base dataset)."""
-    if suite.startswith("variant:"):
-        return [t["id"] for t in suites.load(next(iter(tasks.values()))["base_suite"])] if tasks else []
+    """Every problem id of the EvalPlus dataset behind `suite`."""
     return list(tasks)
 
 def export(rows_path, suite, out_path, split="all"):
