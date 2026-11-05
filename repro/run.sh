@@ -19,8 +19,8 @@ case "${1:-help}" in
     $PY repro/independent_recompute.py;;
   exploratory) shift; $PY repro/exploratory.py "$@";;
   pressure)   # post hoc reanalysis, about a minute; needs numpy, and `fetch` first
-    W=$(pwd)/repro_out/pressure; mkdir -p "$W"; cp thresholds.json runs/confirmatory.labeled.jsonl runs/eval/*_eval_results.json data/*.jsonl.gz repro/pressure/*.py repro/pressure/stored/*_out.json "$W"; cd "$W"
-    for s in pressure pressure2 pressure3 pressure4; do $PY $s.py > $s.out; cmp $s.out ../../repro/pressure/stored/$s.out && echo "CONFIRMED: $s.out identical"; done;;
+    W=$(pwd)/repro_out/pressure; mkdir -p "$W"; cp thresholds.json runs/confirmatory.labeled.jsonl runs/test_power.json runs/eval/*_eval_results.json data/*.jsonl.gz repro/pressure/*.py repro/pressure/stored/*_out.json "$W"; cd "$W"
+    for s in pressure pressure2 pressure3 pressure4 backtest; do $PY $s.py > $s.out; cmp $s.out ../../repro/pressure/stored/$s.out && echo "CONFIRMED: $s.out identical"; done;;
   tests)      $PY tests/test_units.py;;
   rescore)    # official scorer on a random sample, in a container with no network
     N=${2:-500}; V=$(pwd)/repro_out/rescore; mkdir -p "$V"; $PY repro/rescore_sample.py --export "$V" "$N"

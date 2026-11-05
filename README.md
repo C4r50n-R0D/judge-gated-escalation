@@ -26,7 +26,7 @@ Times are from a 4-thread Intel i3-7100U; most machines will be faster.
 | `sh repro/run.sh thresholds` | Rederives the frozen thresholds from calibration data | Python | about 40 minutes |
 | `sh repro/run.sh exploratory` | Reruns the follow-up analyses and compares outputs | Python | about 4 hours |
 | `sh repro/run.sh fetch` | Downloads the two benchmarks, checked by sha256 | Network, once | seconds |
-| `sh repro/run.sh pressure` | Post hoc robustness analyses from the paper's section 4.3 | numpy, `fetch` | about a minute |
+| `sh repro/run.sh pressure` | Post hoc robustness analyses and the back-test from the paper's section 4.3 | numpy, `fetch` | about 2 minutes |
 | `sh repro/run.sh rescore 500` | Official scorer on a random sample, in a container with no network | Docker, `fetch` | about 5 minutes |
 | `sh repro/run.sh repeat` | Regenerates sampled draws and labels, then compares them | Ollama, models, `fetch` | minutes |
 | `sh repro/run.sh scan` | Confirms the package holds no addresses, personal paths or keys | Python | seconds |
@@ -78,7 +78,7 @@ Model-written code runs only in containers started with `--network none`.
 | `thresholds.json`, `split_manifest.json` | Frozen thresholds and task split |
 | `DEVIATIONS.md` | Deviations from the pre-registration |
 | `controllers.py`, `bench.py`, `judge.py`, `suites.py`, `evalplus_io.py` | Pipeline and analysis |
-| `data_store/` | Compressed draws, labels and scorer results, plus provenance |
+| `data_store/` | Compressed draws, labels and scorer results, a mains or battery flag per test draw, plus provenance |
 | `runs/` | Reports from the study; `setup` unpacks the data here too |
 | `ext/E*/` | Each follow-up: specification and written predictions, code, result, outputs |
 | `repro/` | The scripts in this README; `repro/stored/` holds the logs behind `VERIFICATION.md` |

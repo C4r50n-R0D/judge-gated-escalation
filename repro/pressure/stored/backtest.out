@@ -1,0 +1,56 @@
+rows 15718 errors 0 by split Counter({'test': 10759, 'cal': 4959})
+by tier/split [(('local1p5b', 'cal'), 1368), (('local1p5b', 'test'), 2968), (('local3b', 'cal'), 1368), (('local3b', 'test'), 2968), (('local7b', 'cal'), 1368), (('local7b', 'test'), 2968), (('strong14b', 'cal'), 855), (('strong14b', 'test'), 1855)]
+
+== A reproduce main numbers (exact expectations)
+tev       n=371 acc  -0.4 [ -2.0, +1.2] cost    +119 [    -48,   +288] sec  -4.4  H2 fail-cost
+llama     n=371 acc  -1.0 [ -2.1, +0.2] cost   +1568 [  +1383,  +1751] sec  +1.1  H2 fail-cost
+selfconf  n=371 acc  -0.4 [ -1.1, +0.2] cost     +29 [   -104,   +158] sec  -0.3  H2 fail-cost
+visible   n=371 acc  +1.4 [ -0.4, +3.3] cost   -1932 [  -2089,  -1768] sec  -8.5  H2 PASS
+local acc 0.630 strong 0.752 gap 12.2; local cost 761 strong 3751
+tev label cost 1397 = 37.2% of 14B; tokens 333; breakeven 42.5%; 14B sec 16.88 tev sec 1.45
+tev reject 47.7%; rejected correct 40.9%; accepted correct 83.2%
+visible reject 26.3%; fail-visible correct 0.0%; pass-visible correct 85.5%
+selfconf accept 14.6%
+humaneval+ tev reject 23.9%
+mbpp+ tev reject 58.1%
+prefill/decode medians {'3B': (3804, 34.9), '14B': (867, 6.1)}
+power of test draws [('AC Power', 9923), ('Battery Power', 836)]
+first test draw 2026-10-24T04:41:43.657037Z last 2026-10-25T09:39:10.389033Z
+
+== B disjoint draws (never pooled)
+half1 L0-3 S0-1 tev      n=371 acc  +0.5 [ -1.3, +2.4] cost     +83 [    -95,   +261] sec  -4.6  H2 fail-cost
+half1 L0-3 S0-1 visible  n=371 acc  +1.5 [ -0.7, +3.8] cost   -1988 [  -2159,  -1820] sec  -9.0  H2 PASS
+half2 L4-7 S2-4 tev      n=371 acc  -1.1 [ -2.8, +0.5] cost    +156 [    -16,   +335] sec  -4.3  H2 fail-cost
+half2 L4-7 S2-4 visible  n=371 acc  +1.2 [ -0.7, +3.1] cost   -1878 [  -2037,  -1718] sec  -8.0  H2 PASS
+
+== C calibration split at frozen thresholds
+cal tev       n=171 acc  +0.8 [ -1.7, +3.5] cost    -201 [   -466,    +53] sec  -5.3  H2 fail-cost
+cal llama     n=171 acc  +0.1 [ -1.4, +1.8] cost   +1686 [  +1427,  +1938] sec  +2.2  H2 fail-cost
+cal selfconf  n=171 acc  -0.5 [ -1.3, +0.2] cost     -47 [   -257,   +155] sec  -0.7  H2 fail-cost
+cal visible   n=171 acc  +3.8 [ +0.8, +7.0] cost   -2118 [  -2371,  -1872] sec  -9.6  H2 PASS
+
+== D collection order, test blocks in quartiles
+blocks 19 [0, 1, 2] [16, 17, 18]
+Q1 tev      n= 93 acc  -1.9 [ -4.3, +0.3] cost    +183 [   -175,   +532] sec  -5.0  H2 fail-acc-cost
+Q1 visible  n= 93 acc  -1.7 [ -4.8, +0.9] cost   -1917 [  -2266,  -1580] sec  -9.0  H2 fail-acc
+Q2 tev      n= 93 acc  -0.3 [ -4.0, +3.4] cost    -195 [   -527,   +127] sec  -5.7  H2 fail-acc-cost
+Q2 visible  n= 93 acc  +3.3 [ -0.9, +7.7] cost   -2022 [  -2356,  -1677] sec  -8.6  H2 PASS
+Q3 tev      n= 93 acc  -0.1 [ -4.2, +3.7] cost     +61 [   -293,   +417] sec  -4.2  H2 fail-acc-cost
+Q3 visible  n= 93 acc  +1.8 [ -3.1, +6.7] cost   -1969 [  -2299,  -1634] sec  -8.1  H2 fail-acc
+Q4 tev      n= 92 acc  +0.6 [ -2.0, +3.3] cost    +431 [    +83,   +761] sec  -2.8  H2 fail-cost
+Q4 visible  n= 92 acc  +2.2 [ -1.3, +5.7] cost   -1817 [  -2121,  -1515] sec  -8.1  H2 PASS
+jackknife 19 blocks tev acc -0.72..-0.23 cost +78..+168
+
+== E conditions: battery and draws near a model load
+test rows matched 10759 battery 836
+no battery tev n=319 acc  -0.6 [ -2.4, +1.0] cost    +173 [    -14,   +353] sec  -4.2  H2 fail-cost
+no battery visible n=319 acc  +1.0 [ -1.1, +3.1] cost   -1846 [  -2015,  -1675] sec  -8.1  H2 PASS
+load_s>0.1: 21 test draws of 10759; removed:
+   tev n=371 acc  -0.5 [ -2.0, +1.1] cost    +120 [    -47,   +289] sec  -4.4  H2 fail-cost
+   visible n=371 acc  +1.3 [ -0.5, +3.3] cost   -1931 [  -2087,  -1766] sec  -8.5  H2 PASS
+load_s>0.5: 0 test draws of 10759; removed:
+   tev n=371 acc  -0.4 [ -2.0, +1.2] cost    +119 [    -48,   +288] sec  -4.4  H2 fail-cost
+   visible n=371 acc  +1.4 [ -0.4, +3.3] cost   -1932 [  -2089,  -1768] sec  -8.5  H2 PASS
+
+== F placebo: random gate at the same accept rate, 200 runs
+random gate at 0.523 acc -6.4 (sd 0.39) cost +201; tev beat it in 100% of runs

@@ -79,6 +79,38 @@ and after the clean-up alike, and matched the stored draw in every trial once th
 before it. We did not establish the mechanism. Repeatability therefore holds for a warmed model, and a single warm-up draw
 does not always guarantee it.
 
+## Back-test
+`repro/pressure/backtest.py`, written without the pipeline's code, rebuilds the main results from raw rows and then cuts them
+in ways the analysis did not (`repro/pressure/stored/backtest.out`).
+
+| Cut | tev gate against strong-only | Visible gate against strong-only |
+|---|---|---|
+| All 371 test tasks | -0.4 points, +119, fails on cost | +1.4 points, -1,932, passes |
+| Disjoint draws, half 1 | +0.5, +83, fails on cost | +1.5, -1,988, passes |
+| Disjoint draws, half 2 | -1.1, +156, fails on cost | +1.2, -1,878, passes |
+| No battery draws (319 tasks) | -0.6, +173, fails on cost | +1.0, -1,846, passes |
+| No draws with over 0.1 s of model load | -0.5, +120, fails on cost | +1.3, -1,931, passes |
+| Calibration split at frozen thresholds | +0.8, -201 [-466, +53], fails on cost | +3.8, -2,118, passes |
+
+Two results go against a simple reading. tev's calibration estimate was a saving that did not carry over to test. Across
+quartiles of collection order, about 93 tasks each, the visible gate failed the accuracy bound in two of four, so the pooled
+pass should not be read as a pass on every small subset. A random gate at tev's accept rate lost 6.4 points.
+
+## Claim and source audit
+- Every number in the paper's body and appendices appears in a stored source file (780 of 780). That test alone is weak, so
+  each exploratory section was also read against its `RESULT.md`, Table 7 was compared cell by cell with `results.json`
+  (48 of 48), and the deviation counts were recomputed from the draws (96, 1 and 739 battery draws, 836 in all).
+- Power, the break-even rejection rate and the comparison register (42) were recomputed by hand.
+- All 23 arXiv references resolve, with title and author lists matching the arXiv record. Each attributed claim was checked
+  against the source text, not only its abstract. The Tev1 page, the EvalPlus venue and all nine model digests were also checked.
+- Corrected in the paper as a result: the Chen comparison had called different model builds "the same pair" and treated
+  controllers that choose between two actions as if they were escalation gates; the test-execution sentence mixed a confidence
+  bound with a point estimate; the TRIAGE result is now marked post hoc; "differs in" became "combining", since other cited
+  work also pre-registers; a missing reference (Bouchard) was added, including a finding that runs against the three-tier
+  cascade.
+- `ext/E6/RESULT.md` words attack success loosely. As `ext/E6/analyze.py` computes it, the denominator is wrong drafts rejected
+  clean, which is what the paper states.
+
 ## Not checked
 - The whole study has not been regenerated from this package. Repeatability rests on the sample above.
 - Generation has not been repeated on other hardware or other Ollama versions. Expect differences there.

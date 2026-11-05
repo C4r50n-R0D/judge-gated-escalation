@@ -9,7 +9,7 @@ Nothing here depends on how the two machines were connected. To reproduce a run,
 | OS | macOS 15.1 (build 24B83) |
 | Runtime | Ollama 0.40.8 |
 | Ollama settings | `OLLAMA_KEEP_ALIVE=30m`, `OLLAMA_MAX_LOADED_MODELS=1`, `OLLAMA_FLASH_ATTENTION=1`, `OLLAMA_KV_CACHE_TYPE=q8_0` |
-| Quantization | Q4_K_M, as served by the digests below |
+| Quantization | Q4_K_M for the generators and llama, mxfp8 for tev1:4b, nvfp4 for gemma4:12b, as served by the digests below |
 
 ## Orchestration and scoring machine
 | Item | Value |
@@ -33,7 +33,7 @@ did no generation. Accuracy, tokens and token-compute do not depend on this; onl
 | Local, wide gap | qwen2.5-coder:1.5b | d7372fd82851 | 1.5 | 8 |
 | Judge, primary | tev1:4b | 4d24c6f6d61a | 4.2 | once per draft |
 | Judge | llama3.1:8b | 46e0c10c039e | 8.0 | once per draft |
-| Exploratory judges | gemma4:12b, qwen3.5:9b, qwen2.5:7b-instruct | c7597fc90b86, 6488c96fa5fa, 845dbda0ea48 | 12, 9, 7.6 | once per draft |
+| Exploratory judges | gemma4:12b, qwen3.5:9b, qwen2.5:7b-instruct | c7597fc90b86, 6488c96fa5fa, 845dbda0ea48 | 12.4, 9.7, 7.6 | once per draft |
 
 ## Generation settings
 Temperature 0.8, `num_predict` 768, timeout 300 s, seed 1234 plus the draw number. Judges: llama at temperature 0, seed 1,
