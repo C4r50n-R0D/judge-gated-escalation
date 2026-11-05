@@ -96,8 +96,20 @@ Two results go against a simple reading. tev's calibration estimate was a saving
 quartiles of collection order, about 93 tasks each, the visible gate failed the accuracy bound in two of four, so the pooled
 pass should not be read as a pass on every small subset. A random gate at tev's accept rate lost 6.4 points.
 
+## Timing sensitivity in scoring
+Scoring has a time limit, so a stalled machine can turn a pass into a timeout.
+- One rerun of `rescore 500` gave 499 of 500: Mbpp/116, 7B draft 1, a one-line function, was recorded as a timeout while the
+  evaluator reported a stall. A fresh rerun gave 500 of 500. The stored verdict was correct.
+- `evalplus.evaluate` silently reuses an existing results file, so repeating `rescore` used to report the old result. `run.sh`
+  now deletes those files first.
+- 13 of the 16,000 stored evaluations recorded a timeout (12 distinct drafts, 22 draws). Rescoring them three times changed one
+  verdict: a Mbpp/255 draft stored as failed passed all three times. The pre-registration already notes that this task's
+  reference runs close to its time limit. Correcting its three draws (14B reps 0 and 1, 7B rep 5) moves 14B accuracy from 0.752 to
+  0.753 and tev from -0.4 to -0.5 points, and changes no verdict. Another Mbpp/255 draft varied between fail and timeout, so
+  this task stays noisy. Stored data are unchanged.
+
 ## Claim and source audit
-- Every number in the paper's body and appendices appears in a stored source file (780 of 780). That test alone is weak, so
+- Every number in the paper's body and appendices appears in a stored source file (786 of 786). That test alone is weak, so
   each exploratory section was also read against its `RESULT.md`, Table 7 was compared cell by cell with `results.json`
   (48 of 48), and the deviation counts were recomputed from the draws (96, 1 and 739 battery draws, 836 in all).
 - Power, the break-even rejection rate and the comparison register (42) were recomputed by hand.

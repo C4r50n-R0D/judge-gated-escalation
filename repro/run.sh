@@ -23,7 +23,8 @@ case "${1:-help}" in
     for s in pressure pressure2 pressure3 pressure4 backtest; do $PY $s.py > $s.out; cmp $s.out ../../repro/pressure/stored/$s.out && echo "CONFIRMED: $s.out identical"; done;;
   tests)      $PY tests/test_units.py;;
   rescore)    # official scorer on a random sample, in a container with no network
-    N=${2:-500}; V=$(pwd)/repro_out/rescore; mkdir -p "$V"; $PY repro/rescore_sample.py --export "$V" "$N"
+    N=${2:-500}; V=$(pwd)/repro_out/rescore; mkdir -p "$V"; rm -f "$V"/*_eval_results.json   # evalplus silently reuses an existing results file
+    $PY repro/rescore_sample.py --export "$V" "$N"
     EV="docker run --rm --network none --memory 6g -e EVALPLUS_MAX_MEMORY_BYTES=8589934592 -v $V:/app -v evalplus-cache:/root/.cache/evalplus evalplus:0.3.1 evalplus.evaluate --parallel 1"
     $EV --dataset humaneval --samples /app/he.jsonl > "$V/he.log" 2>&1; $EV --dataset mbpp --samples /app/mb.jsonl > "$V/mb.log" 2>&1
     $PY repro/rescore_sample.py --compare "$V" "$N";;
